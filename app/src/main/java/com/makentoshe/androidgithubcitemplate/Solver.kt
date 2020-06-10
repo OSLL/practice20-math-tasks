@@ -12,13 +12,13 @@ class Solver {
             currToken = 'q'
         } else {
             when (expression[pos]) {
-                '+', '-', '*', '/', '^', '(', ')' -> {
+                '+', '-', '*', '/', '@', '%', '(', ')', '|', '&', '^' -> {
                     currToken = expression[pos]
                 }
                 '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.' -> {
                     currToken = 'n'
                     val pos0 = pos
-                    while (pos < expression.length && expression[pos].isDigit()) pos++
+                    while (pos < expression.length && (expression[pos].isDigit() || expression[pos] == '.' || expression[pos] == ',')) pos++
                     try {
                         currNumber = expression.substring(pos0, pos).toDouble()
                     } catch (e: NumberFormatException) {
@@ -75,6 +75,54 @@ class Solver {
         }
     }
 
+    private fun or() : Double {
+        var left = xor()
+        while (true) {
+            when (currToken) {
+                '|' -> {
+                    getNextToken()
+                    val right = term()
+                    left = if((left != 0.0) || (right != 0.0)) 1.0 else 0.0
+                }
+                else -> {
+                    return left
+                }
+            }
+        }
+    }
+
+    private fun and() : Double {
+        var left = expr()
+        while (true) {
+            when (currToken) {
+                '&' -> {
+                    getNextToken()
+                    val right = term()
+                    left = if((left != 0.0) && (right != 0.0)) 1.0 else 0.0
+                }
+                else -> {
+                    return left
+                }
+            }
+        }
+    }
+
+    private fun xor() : Double {
+        var left = and()
+        while (true) {
+            when (currToken) {
+                '^' -> {
+                    getNextToken()
+                    val right = term()
+                    left = if((left != 0.0) xor (right != 0.0)) 1.0 else 0.0
+                }
+                else -> {
+                    return left
+                }
+            }
+        }
+    }
+
     private fun term(): Double {
         var left = prim()
         while (true) {
@@ -87,9 +135,13 @@ class Solver {
                     getNextToken()
                     left /= prim()
                 }
-                '^' -> {
+                '@' -> {
                     getNextToken()
                     left = Math.pow(left, prim())
+                }
+                '%' -> {
+                    getNextToken()
+                    left %= prim()
                 }
                 else -> {
                     return left
@@ -137,12 +189,13 @@ class Solver {
         return res
     }
 
-    fun solve(expr: String): Double {
+    fun solve(expr: String): Int {
         expression = expr
         if (checkExpression()) {
             getNextToken()
-            return expr()
+            return or().toInt()
         }
-        return 0.0
+        return 0
     }
 }
+
