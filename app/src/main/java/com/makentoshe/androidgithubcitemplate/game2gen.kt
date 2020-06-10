@@ -1,4 +1,4 @@
-package com.makentoshe;
+package com.makentoshe.androidgithubcitemplate;
 fun gen2_game(hard:Int):String{
     var operations:String = " +-*^%&|"
     var ans:String=""

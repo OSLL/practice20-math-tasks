@@ -1,4 +1,4 @@
-package com.makentoshe
+package com.makentoshe.androidgithubcitemplate
 
 class Solver {
     private var expression: String = ""
