@@ -1,14 +1,13 @@
 package com.makentoshe.androidgithubcitemplate
 
 import android.os.Bundle
-import android.os.PersistableBundle
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_help.*
+import kotlinx.android.synthetic.main.activity_settings.*
 
-class HelpActivity: AppCompatActivity() {
+class SettingsActivity : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_help)
+        setContentView(R.layout.activity_settings)
 
         exit.setOnClickListener {
             finish()
