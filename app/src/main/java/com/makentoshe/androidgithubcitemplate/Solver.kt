@@ -3,7 +3,7 @@ package com.makentoshe.androidgithubcitemplate
 class Solver {
     private var expression: String = ""
     private var pos = -1
-    private var currNumber = 0.0
+    private var currNumber = 0
     private var currToken = 0.toChar()
 
     private fun getNextToken() {
@@ -15,12 +15,12 @@ class Solver {
                 '+', '-', '*', '/', '@', '%', '(', ')', '|', '&', '^' -> {
                     currToken = expression[pos]
                 }
-                '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.' -> {
+                '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' -> {
                     currToken = 'n'
                     val pos0 = pos
-                    while (pos < expression.length && (expression[pos].isDigit() || expression[pos] == '.' || expression[pos] == ',')) pos++
+                    while (pos < expression.length && expression[pos].isDigit()) pos++
                     try {
-                        currNumber = expression.substring(pos0, pos).toDouble()
+                        currNumber = expression.substring(pos0, pos).toInt()
                     } catch (e: NumberFormatException) {
                         currToken = 'i'
                     }
@@ -34,7 +34,7 @@ class Solver {
         }
     }
 
-    private fun prim(): Double {
+    private fun prim(): Int {
         return when (currToken) {
             'n' -> {
                 getNextToken()
@@ -56,7 +56,7 @@ class Solver {
         }
     }
 
-    private fun expr(): Double {
+    private fun expr(): Int {
         var left = term()
         while (true) {
             when (currToken) {
@@ -75,14 +75,13 @@ class Solver {
         }
     }
 
-    private fun or() : Double {
+    private fun or() : Int {
         var left = xor()
         while (true) {
             when (currToken) {
                 '|' -> {
                     getNextToken()
-                    val right = term()
-                    left = if((left != 0.0) || (right != 0.0)) 1.0 else 0.0
+                    left = left or term()
                 }
                 else -> {
                     return left
@@ -91,14 +90,13 @@ class Solver {
         }
     }
 
-    private fun and() : Double {
+    private fun and() : Int {
         var left = expr()
         while (true) {
             when (currToken) {
                 '&' -> {
                     getNextToken()
-                    val right = term()
-                    left = if((left != 0.0) && (right != 0.0)) 1.0 else 0.0
+                    left = left and term()
                 }
                 else -> {
                     return left
@@ -107,14 +105,13 @@ class Solver {
         }
     }
 
-    private fun xor() : Double {
+    private fun xor() : Int {
         var left = and()
         while (true) {
             when (currToken) {
                 '^' -> {
                     getNextToken()
-                    val right = term()
-                    left = if((left != 0.0) xor (right != 0.0)) 1.0 else 0.0
+                    left = left xor term()
                 }
                 else -> {
                     return left
@@ -123,7 +120,7 @@ class Solver {
         }
     }
 
-    private fun term(): Double {
+    private fun term(): Int {
         var left = prim()
         while (true) {
             when (currToken) {
@@ -137,7 +134,7 @@ class Solver {
                 }
                 '@' -> {
                     getNextToken()
-                    left = Math.pow(left, prim())
+                    left = Math.pow(left.toDouble(), prim().toDouble()).toInt()
                 }
                 '%' -> {
                     getNextToken()
@@ -193,9 +190,8 @@ class Solver {
         expression = expr
         if (checkExpression()) {
             getNextToken()
-            return or().toInt()
+            return or()
         }
         return 0
     }
 }
-
