@@ -15,7 +15,7 @@ fun gen2_game(hard:Int):String{
         return ans
     }
     if(hard==2){
-        val num=(1..7).random()
+        val num=(4..7).random()
         for(i in 0..num){
             ans+=(1..9).random()
             if(i!=num) {
@@ -27,7 +27,7 @@ fun gen2_game(hard:Int):String{
         return ans
     }
     if(hard==3){
-        val num=(1..10).random()
+        val num=(7..10).random()
         for(i in 0..num) {
             ans += (1..9).random()
             if (i != num) {
