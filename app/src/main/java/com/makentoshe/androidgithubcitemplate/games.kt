@@ -5,25 +5,26 @@ fun game1(hard:Int):String {
     var query = gen2_game(hard)
     var ans = ""
     var result = Solver().solve(query).toInt()
-    query = query + "=" + result
     for (i in 0..query.lastIndex) {
         if (!query[i].isDigit())
             ans += query[i]
         else
             ans += " "
     }
-    return ans
+    return ans+'='+result
 }
 fun game2(hard:Int):String {
     var query = gen2_game(hard)
     var ans = ""
     var result = Solver().solve(query).toInt()
-    query = query + "=" + result
     for (i in 0..query.lastIndex) {
         if (query[i].isDigit())
             ans += query[i]
         else
             ans += " "
     }
-    return ans
+    return ans+'='+result
+}
+fun main(){
+    print(game2(1))
 }
