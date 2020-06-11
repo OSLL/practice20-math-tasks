@@ -25,6 +25,3 @@ fun game2(hard:Int):String {
     }
     return ans+'='+result
 }
-fun main(){
-    print(game2(1))
-}
