@@ -7,4 +7,5 @@
     android:textColor = "#FFFFFF"
     android:paddingBottom = "10sp"
     android:paddingTop = "5sp"
+    android:paddingStart = "5sp"
     />
