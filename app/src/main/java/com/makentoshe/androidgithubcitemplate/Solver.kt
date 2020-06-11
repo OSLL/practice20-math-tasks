@@ -1,5 +1,11 @@
 package com.makentoshe.androidgithubcitemplate
 
+class BracesCountException : Exception()
+class EndOnOperatorException : Exception()
+class OperatorsTogetherException : Exception()
+class EmptyExpressionException : Exception()
+class IncorrectSymbolException : Exception()
+
 class Solver {
     private var expression: String = ""
     private var pos = -1
@@ -23,6 +29,9 @@ class Solver {
                     currNumber = expression.substring(pos0, pos).toInt()
 
                     pos--
+                }
+                ' ' -> {
+                    getNextToken()
                 }
                 else -> {
                     currToken = 'i'
@@ -99,7 +108,7 @@ class Solver {
         }
     }
 
-    private fun operAnd() : Int {
+    private fun operAnd(): Int {
         var left = operPlus()
         while (true) {
             when (currToken) {
@@ -114,7 +123,7 @@ class Solver {
         }
     }
 
-    private fun operXor() : Int {
+    private fun operXor(): Int {
         var left = operAnd()
         while (true) {
             when (currToken) {
@@ -129,7 +138,7 @@ class Solver {
         }
     }
 
-    private fun operOr() : Int {
+    private fun operOr(): Int {
         var left = operXor()
         while (true) {
             when (currToken) {
@@ -144,15 +153,13 @@ class Solver {
         }
     }
 
-    private fun checkExpression(): Boolean {
-        expression = expression.replace(" ", "")
+    private fun checkExpression() {
         pos = -1
-        var res = true
-        if (expression.isEmpty()) res = false
+        if (expression.isEmpty()) throw EmptyExpressionException()
         var prevToken = '('
         getNextToken()
         while (currToken != 'q') {
-            if (currToken == 'i') res = false
+            if (currToken == 'i') throw IncorrectSymbolException()
             when (prevToken) {
                 'n', ')' -> {
                     if (currToken == '(' || currToken == 'n') {
@@ -162,7 +169,7 @@ class Solver {
                 }
                 in ops, '(' -> {
                     when(currToken) {
-                        in ops, ')' -> res = false
+                        in ops, ')' -> throw OperatorsTogetherException()
                     }
                 }
             }
@@ -170,24 +177,20 @@ class Solver {
             getNextToken()
         }
         when(prevToken) {
-            in ops, '(' -> res = false
+            in ops, '(' -> throw EndOnOperatorException()
         }
         var braces = 0
         for (e in expression) {
             if (e == '(') braces++ else if (e == ')') braces--
         }
-        if (braces != 0) res = false
+        if (braces != 0) throw BracesCountException()
         pos = -1
-        return res
     }
 
     fun solve(expr: String): Int {
         expression = expr
-        if (checkExpression()) {
-            getNextToken()
-            return operOr()
-        }
-        return 0
+        checkExpression()
+        getNextToken()
+        return operOr()
     }
 }
-
