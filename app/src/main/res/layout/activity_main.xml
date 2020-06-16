@@ -4,36 +4,37 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:background="#000000">
+    android:background="@drawable/fon"
+    tools:context=".MainActivity">
 
 
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text = "Цифровальня"
-        android:gravity = "center"
+        android:fontFamily="sans-serif-black"
+        android:gravity="center"
+        android:text="Цифровальня"
+        android:textColor="#30A4FF"
+        android:textSize="45sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.20"
-        android:textColor = "#30A4FF"
-        android:textSize = "45sp" />
+        app:layout_constraintVertical_bias="0.20" />
 
     <Button
         android:id="@+id/helpButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="#999999"
+        android:paddingStart="50sp"
+        android:paddingTop="10sp"
+        android:paddingEnd="50sp"
+        android:paddingBottom="10sp"
         android:text="Как играть?"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
-        android:paddingTop = "10sp"
-        android:paddingBottom = "10sp"
-        android:paddingEnd = "50sp"
-        android:paddingStart = "50sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
