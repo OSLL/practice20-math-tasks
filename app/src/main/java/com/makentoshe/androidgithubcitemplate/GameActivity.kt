@@ -65,8 +65,8 @@ class GameActivity: AppCompatActivity() {
         }
 
         return when(intent.getStringExtra("mode")) {
-            "Расставить знаки" -> game1(hard)
-            "Расставить цифры" -> game2(hard)
+            "Расставить знаки" -> game2(hard)
+            "Расставить цифры" -> game1(hard)
             else -> game1(hard)
         }
     }
@@ -127,7 +127,7 @@ class GameActivity: AppCompatActivity() {
             when (event.action) {
                 DragEvent.ACTION_DRAG_STARTED -> {
                     beginIndex = task_layout.indexOfChild(dragView)
-                    index = -1
+                    index = -2
                     task_layout.removeView(dragView)
                     vll.addView(draggingView, beginIndex)
                     true
