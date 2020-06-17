@@ -1,3 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Цифровальня</string>
+    <string name="settings_title">Game settings</string>
+    <string name="menu_button">Menu</string>
+    <string name="play_button">Play</string>
+    <string name="game_difficulty_annotation">Game difficulty:</string>
+    <string name="game_mode_annotation">Game mode:</string>
+    <string name="difficulty_annotation">Difficulty: %s</string>
+    <string name="skip_button">Skip</string>
+    <string name="check_button">Check</string>
+    <string name="hint_button">Hint</string>
+    <string name="mode_annotation">Mode: %s</string>
+    <string name="how_to_play_title">How to play?</string>
+    <string name="rules">*Здесь будут правила*</string>
+    <string name="back_button">Back</string>
+    <string name="start_game_button">Start game</string>
+    <string-array name="difficulty">
+        <item>I\'m too young to die</item>
+        <item>Hurt me plenty</item>
+        <item>Nightmare!!!</item>
+    </string-array>
+    <string-array name="mode">
+        <item>Place signs</item>
+        <item>Place digits</item>
+        <item>Mixed</item>
+    </string-array>
 </resources>
