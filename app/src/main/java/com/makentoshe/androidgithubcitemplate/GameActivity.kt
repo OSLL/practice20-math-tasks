@@ -1,19 +1,28 @@
 package com.makentoshe.androidgithubcitemplate
 
+import android.content.ClipData
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
-import android.view.*
+import android.view.DragEvent
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
 import android.widget.PopupMenu
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
 import kotlinx.android.synthetic.main.activity_game.*
+import kotlinx.android.synthetic.main.activity_help.*
+
 
 class GameActivity: AppCompatActivity() {
 
-    class MovableTextView(context : Context) : AppCompatTextView(context) {
+    class MovableTextView(context : Context, val fixed : Boolean) : AppCompatTextView(context) {
         init {
             layoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -22,9 +31,29 @@ class GameActivity: AppCompatActivity() {
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 40f)
             setTextColor(Color.parseColor("#E65A5A"))
 
+
+
+
         }
 
+        override fun onTouchEvent(event: MotionEvent?): Boolean {
+            super.onTouchEvent(event)
 
+            return when (event?.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    val data = ClipData.newPlainText("", "")
+                    val dsb = DragShadowBuilder(this)
+                    if (Build.VERSION.SDK_INT >= 24) {
+                        startDragAndDrop(data, dsb, this, 0);
+                    } else {
+                        startDrag(data, dsb, this, 0);
+                    }
+                    visibility = View.INVISIBLE
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     private fun task() : String {
@@ -48,7 +77,7 @@ class GameActivity: AppCompatActivity() {
         var text : MovableTextView
 
         for(a in task) {
-            text = MovableTextView(this)
+            text = MovableTextView(this, true)
             text.text = a.toString()
 
 
@@ -82,6 +111,67 @@ class GameActivity: AppCompatActivity() {
         }
         button.setOnClickListener {
             menu.show()
+        }
+
+        var index = -1
+        val draggingView = TextView(this)
+        draggingView.text = "  "
+        var beginIndex = 0
+
+
+        task_layout.setOnDragListener { v, event ->
+
+            val dragView = event.localState as View
+            when (event.action) {
+                DragEvent.ACTION_DRAG_STARTED -> {
+                    beginIndex = task_layout.indexOfChild(dragView)
+                    index = -1
+                    task_layout.removeView(dragView)
+                    true
+                }
+                DragEvent.ACTION_DRAG_ENTERED -> {
+
+                    true
+                }
+
+                DragEvent.ACTION_DRAG_LOCATION -> {
+
+                    if(index == -1) {
+                        index = 0
+                        for (i in 0 until task_layout.childCount) {
+                            if (
+                                task_layout.getChildAt(i).x <= event.x
+                            ) index = i + 1
+                        }
+
+                        task_layout.addView(draggingView, index)
+
+                        println("added view at index $index pivotX = ${event.x} 0pivotX")
+                    }
+                    true
+                }
+                DragEvent.ACTION_DRAG_EXITED -> {
+                    task_layout.removeView(draggingView)
+                    index = -1
+                    true
+                }
+                DragEvent.ACTION_DROP -> {
+                    task_layout.addView(dragView, index)
+                    true
+                }
+
+                DragEvent.ACTION_DRAG_ENDED -> {
+                    task_layout.removeView(draggingView)
+                    dragView.visibility = View.VISIBLE
+                    if(!event.result) task_layout.addView(dragView, beginIndex)
+                    true
+                }
+                else -> {
+                    // An unknown action type was received.
+                    Log.e("DragDrop Example", "Unknown action type received by OnDragListener.")
+                    false
+                }
+            }
         }
 
         var task = task()
