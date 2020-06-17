@@ -12,6 +12,7 @@ import android.view.DragEvent
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -113,13 +114,14 @@ class GameActivity: AppCompatActivity() {
             menu.show()
         }
 
-        var index = -1
+        var index = -2
         val draggingView = TextView(this)
-        draggingView.text = "  "
+        draggingView.layoutParams = ViewGroup.LayoutParams(50, ViewGroup.LayoutParams.MATCH_PARENT)
         var beginIndex = 0
 
 
         task_layout.setOnDragListener { v, event ->
+            val vll = v as LinearLayout
 
             val dragView = event.localState as View
             when (event.action) {
@@ -127,6 +129,7 @@ class GameActivity: AppCompatActivity() {
                     beginIndex = task_layout.indexOfChild(dragView)
                     index = -1
                     task_layout.removeView(dragView)
+                    vll.addView(draggingView, beginIndex)
                     true
                 }
                 DragEvent.ACTION_DRAG_ENTERED -> {
@@ -135,15 +138,17 @@ class GameActivity: AppCompatActivity() {
                 }
 
                 DragEvent.ACTION_DRAG_LOCATION -> {
+                    val begi = index
 
-                    if(index == -1) {
-                        index = 0
-                        for (i in 0 until task_layout.childCount) {
-                            if (
-                                task_layout.getChildAt(i).x <= event.x
-                            ) index = i + 1
-                        }
-
+                    index = -1
+                    for (i in 0 until task_layout.childCount) {
+                        if (
+                            vll.getChildAt(i).x + vll.getChildAt(i).width / 2 <= event.x + dragView.width / 2
+                        ) index = i
+                    }
+                    if(begi != index) {
+                        if(begi != -2)
+                            task_layout.removeView(draggingView)
                         task_layout.addView(draggingView, index)
 
                         println("added view at index $index pivotX = ${event.x} 0pivotX")
@@ -152,7 +157,7 @@ class GameActivity: AppCompatActivity() {
                 }
                 DragEvent.ACTION_DRAG_EXITED -> {
                     task_layout.removeView(draggingView)
-                    index = -1
+                    index = -2
                     true
                 }
                 DragEvent.ACTION_DROP -> {
