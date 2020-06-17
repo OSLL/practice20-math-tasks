@@ -1,12 +1,13 @@
 package com.makentoshe.androidgithubcitemplate
 
-class BracesCountException : Exception()
-class EndOnOperatorException : Exception()
-class OperatorsTogetherException : Exception()
-class EmptyExpressionException : Exception()
-class IncorrectSymbolException : Exception()
-
 class Solver {
+    class BracesCountException : Exception()
+    class EndOnOperatorException : Exception()
+    class OperatorsTogetherException : Exception()
+    class EmptyExpressionException : Exception()
+    class IncorrectSymbolException : Exception()
+    class BeginOperatorException : Exception()
+
     private var expression: String = ""
     private var pos = -1
     private var currNumber = 0
@@ -156,7 +157,7 @@ class Solver {
     private fun checkExpression() {
         pos = -1
         if (expression.isEmpty()) throw EmptyExpressionException()
-        var prevToken = '('
+        var prevToken = ' '
         getNextToken()
         while (currToken != 'q') {
             if (currToken == 'i') throw IncorrectSymbolException()
@@ -171,6 +172,9 @@ class Solver {
                     when(currToken) {
                         in ops, ')' -> throw OperatorsTogetherException()
                     }
+                }
+                ' ' -> {
+                    if(currToken !in arrayOf('n', '+', '-')) throw BeginOperatorException()
                 }
             }
             prevToken = currToken
