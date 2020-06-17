@@ -1,5 +1,6 @@
 package com.makentoshe.androidgithubcitemplate
 
+
 import android.content.ClipData
 import android.content.Context
 import android.content.Intent
@@ -19,12 +20,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
 import kotlinx.android.synthetic.main.activity_game.*
-import kotlinx.android.synthetic.main.activity_help.*
 
 
 class GameActivity: AppCompatActivity() {
 
-    class MovableTextView(context : Context, val fixed : Boolean) : AppCompatTextView(context) {
+    class MovableTextView(context : Context, private val fixed : Boolean) : AppCompatTextView(context) {
         init {
             layoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -46,9 +46,9 @@ class GameActivity: AppCompatActivity() {
                     val data = ClipData.newPlainText("", "")
                     val dsb = DragShadowBuilder(this)
                     if (Build.VERSION.SDK_INT >= 24) {
-                        startDragAndDrop(data, dsb, this, 0);
+                        startDragAndDrop(data, dsb, this, 0)
                     } else {
-                        startDrag(data, dsb, this, 0);
+                        startDrag(data, dsb, this, 0)
                     }
                     true
                 }
@@ -58,15 +58,11 @@ class GameActivity: AppCompatActivity() {
     }
 
     private fun task() : String {
-        val hard = when(intent.getStringExtra("difficulty")) {
-            "I'm to young to die" -> 1
-            "Hurt me plenty" -> 2
-            else -> 3
-        }
+        val hard = intent.getIntExtra("difficulty", 1) + 1
 
-        return when(intent.getStringExtra("mode")) {
-            "Place signs" -> game2(hard)
-            "Рlace digits" -> game1(hard)
+        return when(intent.getIntExtra("mode", 1)) {
+            0 -> game2(hard)
+            1 -> game1(hard)
             else -> game3(hard)
         }
     }
@@ -102,8 +98,8 @@ class GameActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
-        difficulty.text = difficulty.text.toString() + intent.getStringExtra("difficulty")
-        mode.text = mode.text.toString() + intent.getStringExtra("mode")
+        difficulty.text = getString(R.string.difficulty_annotation, intent.getStringExtra("difficulty-name"))
+        mode.text = getString(R.string.mode_annotation, intent.getStringExtra("mode-name"))
         val menu = PopupMenu(this, button)
         menu.menu.add(1, 101, 1, "Settings")
         menu.menu.add(1, 102, 2, "How to play?")
@@ -205,7 +201,7 @@ class GameActivity: AppCompatActivity() {
                     true
                 }
                 DragEvent.ACTION_DRAG_ENDED -> {
-                    if(!event.result)
+                    if(!event.result && beginIndex == -1)
                         vll.addView(dragView)
                     true
                 }
@@ -213,7 +209,7 @@ class GameActivity: AppCompatActivity() {
             }
         }
 
-        var task = " - - - =-4"// task()
+        var task = task()
 
         setTaskLayout(task)
         setSymbolsLayout("123456789")

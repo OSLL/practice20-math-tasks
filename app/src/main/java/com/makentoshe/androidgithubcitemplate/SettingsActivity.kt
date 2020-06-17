@@ -18,20 +18,14 @@ class SettingsActivity : AppCompatActivity(){
 
         gameButton.setOnClickListener {
             val intent = Intent(this, GameActivity::class.java)
-            intent.putExtra("difficulty", spinner.selectedItem.toString())
-            intent.putExtra("mode", spinner2.selectedItem.toString())
+            intent.putExtra("difficulty", spinner.selectedItemPosition)
+            intent.putExtra("difficulty-name", spinner.selectedItem.toString())
+            intent.putExtra("mode", spinner2.selectedItemPosition)
+            intent.putExtra("mode-name", spinner2.selectedItem.toString())
             startActivity(intent)
         }
         //Подчёркивание
         //textView4.paintFlags = Paint.UNDERLINE_TEXT_FLAG
         //textView5.paintFlags = Paint.UNDERLINE_TEXT_FLAG
-
-        val difficulty = arrayOf("I'm to young to die", "Hurt me plenty", "Nightmare!!!")
-        val adapter = ArrayAdapter(this,R.layout.spinner_item,difficulty)
-        spinner.adapter = adapter
-
-        val mode = arrayOf("Place signs", "Рlace digits", "Mixed")
-        val adapter2 = ArrayAdapter(this,R.layout.spinner_item,mode)
-        spinner2.adapter = adapter2
     }
 }
