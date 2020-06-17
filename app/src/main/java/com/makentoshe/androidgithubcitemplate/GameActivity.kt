@@ -59,14 +59,14 @@ class GameActivity: AppCompatActivity() {
 
     private fun task() : String {
         val hard = when(intent.getStringExtra("difficulty")) {
-            "Легкая" -> 1
-            "Средняя" -> 2
+            "I'm to young to die" -> 1
+            "Hurt me plenty" -> 2
             else -> 3
         }
 
         return when(intent.getStringExtra("mode")) {
-            "Расставить знаки" -> game2(hard)
-            "Расставить цифры" -> game1(hard)
+            "Place signs" -> game2(hard)
+            "Рlace digits" -> game1(hard)
             else -> game1(hard)
         }
     }
@@ -105,8 +105,8 @@ class GameActivity: AppCompatActivity() {
         difficulty.text = difficulty.text.toString() + intent.getStringExtra("difficulty")
         mode.text = mode.text.toString() + intent.getStringExtra("mode")
         val menu = PopupMenu(this, button)
-        menu.menu.add(1, 101, 1, "Настройки")
-        menu.menu.add(1, 102, 2, "Как играть?")
+        menu.menu.add(1, 101, 1, "Settings")
+        menu.menu.add(1, 102, 2, "How to play?")
         menu.setOnMenuItemClickListener {
             when(it.itemId) {
                 101 -> {
@@ -240,13 +240,13 @@ class GameActivity: AppCompatActivity() {
             }
             try {
                 if (Solver().solve(left) == Solver().solve(right)) {
-                    Toast.makeText(this, "Правильно!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Correct!", Toast.LENGTH_SHORT).show()
                     task = task()
                     setTaskLayout(task)
                     setSymbolsLayout("123456789")
                 }
                 else
-                    Toast.makeText(this, "Неправильно :(", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Incorrect :(", Toast.LENGTH_SHORT).show()
             } catch (e : Exception) {
                 e.printStackTrace()
             }

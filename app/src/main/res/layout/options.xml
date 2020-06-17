@@ -5,10 +5,10 @@
 
     <Button
     android:id = "@+id/settings"
-    android:text = "Настройки" />
+    android:text = "Settings" />
 
     <Button
         android:id = "@+id/help"
-        android:text = "Как играть?" />
+        android:text = "How to play?" />
 
 </LinearLayout>

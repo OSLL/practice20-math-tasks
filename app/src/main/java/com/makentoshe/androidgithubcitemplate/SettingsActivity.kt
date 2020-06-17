@@ -26,11 +26,11 @@ class SettingsActivity : AppCompatActivity(){
         //textView4.paintFlags = Paint.UNDERLINE_TEXT_FLAG
         //textView5.paintFlags = Paint.UNDERLINE_TEXT_FLAG
 
-        val difficulty = arrayOf("Легкая", "Средняя", "Сложная")
+        val difficulty = arrayOf("I'm to young to die", "Hurt me plenty", "Nightmare!!!")
         val adapter = ArrayAdapter(this,R.layout.spinner_item,difficulty)
         spinner.adapter = adapter
 
-        val mode = arrayOf("Расставить знаки", "Расставить цифры", "Комбинированный")
+        val mode = arrayOf("Place signs", "Рlace digits", "Mixed")
         val adapter2 = ArrayAdapter(this,R.layout.spinner_item,mode)
         spinner2.adapter = adapter2
     }
