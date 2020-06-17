@@ -8,10 +8,8 @@ fun game1(hard:Int):String {
     for (i in 0..query.lastIndex) {
         if (!query[i].isDigit())
             ans += query[i]
-        else
-            ans += " "
     }
-    return ans+'='+result
+    return ans + '=' + result
 }
 fun game2(hard:Int):String {
     var query = gen2_game(hard)
@@ -20,8 +18,6 @@ fun game2(hard:Int):String {
     for (i in 0..query.lastIndex) {
         if (query[i].isDigit())
             ans += query[i]
-        else
-            ans += " "
     }
-    return ans+'='+result
+    return ans + '=' + result
 }
