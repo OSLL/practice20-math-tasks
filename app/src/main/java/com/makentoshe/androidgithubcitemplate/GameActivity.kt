@@ -204,11 +204,16 @@ class GameActivity: AppCompatActivity() {
                     vll.removeView(dragView)
                     true
                 }
+                DragEvent.ACTION_DRAG_ENDED -> {
+                    if(!event.result)
+                        vll.addView(dragView)
+                    true
+                }
                 else -> true
             }
         }
 
-        var task = task()
+        var task = " - - - =-4"// task()
 
         setTaskLayout(task)
         setSymbolsLayout("123456789")
@@ -242,8 +247,8 @@ class GameActivity: AppCompatActivity() {
                 }
                 else
                     Toast.makeText(this, "Неправильно :(", Toast.LENGTH_SHORT).show()
-            } finally {
-
+            } catch (e : Exception) {
+                e.printStackTrace()
             }
         }
 
