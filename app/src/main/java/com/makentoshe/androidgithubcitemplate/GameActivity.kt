@@ -33,12 +33,12 @@ class GameActivity: AppCompatActivity() {
             setTextColor(Color.parseColor("#E65A5A"))
 
 
-
-
         }
 
         override fun onTouchEvent(event: MotionEvent?): Boolean {
             super.onTouchEvent(event)
+
+            if(fixed) return false
 
             return when (event?.action) {
                 MotionEvent.ACTION_DOWN -> {
@@ -49,7 +49,6 @@ class GameActivity: AppCompatActivity() {
                     } else {
                         startDrag(data, dsb, this, 0);
                     }
-                    visibility = View.INVISIBLE
                     true
                 }
                 else -> false
@@ -81,10 +80,21 @@ class GameActivity: AppCompatActivity() {
             text = MovableTextView(this, true)
             text.text = a.toString()
 
-
-            text.performClick()
-
             task_layout.addView(text)
+        }
+    }
+
+    private fun setSymbolsLayout(symbols : String) {
+
+        symbols_layout.removeAllViews()
+
+        var text : MovableTextView
+
+        for(a in symbols) {
+            text = MovableTextView(this, false)
+            text.text = a.toString()
+
+            symbols_layout.addView(text)
         }
     }
 
@@ -127,9 +137,12 @@ class GameActivity: AppCompatActivity() {
             when (event.action) {
                 DragEvent.ACTION_DRAG_STARTED -> {
                     beginIndex = task_layout.indexOfChild(dragView)
+                    println(beginIndex)
                     index = -2
                     task_layout.removeView(dragView)
-                    vll.addView(draggingView, beginIndex)
+                    if(beginIndex != -1) {
+                        vll.addView(draggingView, beginIndex)
+                    }
                     true
                 }
                 DragEvent.ACTION_DRAG_ENTERED -> {
@@ -146,12 +159,11 @@ class GameActivity: AppCompatActivity() {
                             vll.getChildAt(i).x + vll.getChildAt(i).width / 2 <= event.x + dragView.width / 2
                         ) index = i
                     }
-                    if(begi != index) {
-                        if(begi != -2)
-                            task_layout.removeView(draggingView)
-                        task_layout.addView(draggingView, index)
+                    println("begi = $begi")
 
-                        println("added view at index $index pivotX = ${event.x} 0pivotX")
+                    if(begi != index) {
+                        task_layout.removeView(draggingView)
+                        task_layout.addView(draggingView, index)
                     }
                     true
                 }
@@ -168,7 +180,8 @@ class GameActivity: AppCompatActivity() {
                 DragEvent.ACTION_DRAG_ENDED -> {
                     task_layout.removeView(draggingView)
                     dragView.visibility = View.VISIBLE
-                    if(!event.result) task_layout.addView(dragView, beginIndex)
+                    index = -2
+                    if(!event.result && beginIndex != -1) task_layout.addView(dragView, beginIndex)
                     true
                 }
                 else -> {
@@ -179,14 +192,30 @@ class GameActivity: AppCompatActivity() {
             }
         }
 
+        symbols_layout.setOnDragListener { v, event ->
+            val vll = v as LinearLayout
+
+            val dragView = event.localState as View
+            when (event.action) {
+                DragEvent.ACTION_DRAG_STARTED -> {
+                    vll.removeView(dragView)
+                    true
+                }
+                else -> true
+            }
+        }
+
         var task = task()
+
+        setTaskLayout(task)
+        setSymbolsLayout("123456789")
 
         skipButton.setOnClickListener {
             task = task()
             setTaskLayout(task)
+            setSymbolsLayout("123456789")
         }
 
-        setTaskLayout(task)
 
     }
 }
