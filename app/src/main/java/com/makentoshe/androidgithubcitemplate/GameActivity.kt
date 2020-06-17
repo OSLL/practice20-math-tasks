@@ -67,7 +67,7 @@ class GameActivity: AppCompatActivity() {
         return when(intent.getStringExtra("mode")) {
             "Place signs" -> game2(hard)
             "Рlace digits" -> game1(hard)
-            else -> game1(hard)
+            else -> game3(hard)
         }
     }
 
