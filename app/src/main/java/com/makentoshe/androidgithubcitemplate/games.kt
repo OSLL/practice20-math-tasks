@@ -28,11 +28,11 @@ fun game3(hard:Int):String {
     var used: Array<Int> = Array(query.length, { i -> 0 })
     var it = 0
     while (it < query.length / 2) {
-        var k = (0..query.length).random()
+        var k = (0..query.lastIndex).random()
         used[k] = 1
         it += 1
     }
-    for (i in 0..query.length) {
+    for (i in 0..query.lastIndex) {
         if (used[i] == 0)
             ans += query[i]
     }
