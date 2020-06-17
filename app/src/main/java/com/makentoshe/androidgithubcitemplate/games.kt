@@ -21,3 +21,20 @@ fun game2(hard:Int):String {
     }
     return ans + '=' + result
 }
+fun game3(hard:Int):String {
+    var query = gen2_game(hard)
+    var ans = ""
+    var result = Solver().solve(query).toInt()
+    var used: Array<Int> = Array(query.length, { i -> 0 })
+    var it = 0
+    while (it < query.length / 2) {
+        var k = (0..query.length).random()
+        used[k] = 1
+        it += 1
+    }
+    for (i in 0..query.length) {
+        if (used[i] == 0)
+            ans += query[i]
+    }
+    return ans + '=' + result
+}
