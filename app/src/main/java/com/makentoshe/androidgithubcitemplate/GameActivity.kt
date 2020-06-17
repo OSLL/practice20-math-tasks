@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.PopupMenu
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
 import kotlinx.android.synthetic.main.activity_game.*
@@ -124,6 +125,8 @@ class GameActivity: AppCompatActivity() {
             menu.show()
         }
 
+
+
         var index = -2
         val draggingView = TextView(this)
         draggingView.layoutParams = ViewGroup.LayoutParams(50, ViewGroup.LayoutParams.MATCH_PARENT)
@@ -216,6 +219,33 @@ class GameActivity: AppCompatActivity() {
             setSymbolsLayout("123456789")
         }
 
+        checkButton.setOnClickListener {
+            var left = ""
+            var right = ""
+            var side = false
+
+            for(i in 0 until task_layout.childCount) {
+                if((task_layout.getChildAt(i) as TextView).text == "=") {
+                    side = true
+                } else if(!side) {
+                    left += (task_layout.getChildAt(i) as TextView).text
+                } else {
+                    right += (task_layout.getChildAt(i) as TextView).text
+                }
+            }
+            try {
+                if (Solver().solve(left) == Solver().solve(right)) {
+                    Toast.makeText(this, "Правильно!", Toast.LENGTH_SHORT).show()
+                    task = task()
+                    setTaskLayout(task)
+                    setSymbolsLayout("123456789")
+                }
+                else
+                    Toast.makeText(this, "Неправильно :(", Toast.LENGTH_SHORT).show()
+            } finally {
+
+            }
+        }
 
     }
 }
