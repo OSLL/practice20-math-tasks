@@ -27,12 +27,12 @@ class GameActivity: AppCompatActivity() {
     class MovableTextView(context : Context, private val fixed : Boolean) : AppCompatTextView(context) {
         init {
             layoutParams = ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
+               50,
+                ViewGroup.LayoutParams.MATCH_PARENT
             )
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 40f)
             setTextColor(Color.parseColor("#E65A5A"))
-
+            textAlignment = View.TEXT_ALIGNMENT_CENTER
 
         }
 
@@ -124,8 +124,7 @@ class GameActivity: AppCompatActivity() {
 
 
         var index = -2
-        val draggingView = TextView(this)
-        draggingView.layoutParams = ViewGroup.LayoutParams(50, ViewGroup.LayoutParams.MATCH_PARENT)
+        val draggingView = MovableTextView(this, true)
         var beginIndex = 0
 
 
@@ -158,7 +157,6 @@ class GameActivity: AppCompatActivity() {
                             vll.getChildAt(i).x + vll.getChildAt(i).width / 2 <= event.x + dragView.width / 2
                         ) index = i
                     }
-                    println("begi = $begi")
 
                     if(begi != index) {
                         task_layout.removeView(draggingView)
@@ -185,7 +183,7 @@ class GameActivity: AppCompatActivity() {
                 }
                 else -> {
                     // An unknown action type was received.
-                    Log.e("DragDrop Example", "Unknown action type received by OnDragListener.")
+                    Log.e("DragDrop", "Unknown action type received by OnDragListener.")
                     false
                 }
             }
@@ -203,6 +201,12 @@ class GameActivity: AppCompatActivity() {
                 DragEvent.ACTION_DRAG_ENDED -> {
                     if(!event.result && beginIndex == -1)
                         vll.addView(dragView)
+                    true
+                }
+                DragEvent.ACTION_DROP -> {
+                    task_layout.removeView(dragView)
+                    vll.addView(dragView)
+                    beginIndex = -1
                     true
                 }
                 else -> true
