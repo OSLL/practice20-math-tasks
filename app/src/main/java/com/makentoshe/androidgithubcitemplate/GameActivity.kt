@@ -27,7 +27,7 @@ class GameActivity: AppCompatActivity() {
     class MovableTextView(context : Context, private val fixed : Boolean) : AppCompatTextView(context) {
         init {
             layoutParams = ViewGroup.LayoutParams(
-               50,
+                TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 25f, resources.displayMetrics).toInt(),
                 ViewGroup.LayoutParams.MATCH_PARENT
             )
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 40f)
