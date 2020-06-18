@@ -107,7 +107,7 @@ class GameActivity: AppCompatActivity() {
             else -> "123456789+-*"
         }
 
-        if(intent.getIntExtra("difficulty", 1) == 2)
+        if(intent.getIntExtra("difficulty", 1) == 2 && intent.getIntExtra("mode", 1) != 0)
             symbols += "^%&|"
 
         for(a in symbols) {
