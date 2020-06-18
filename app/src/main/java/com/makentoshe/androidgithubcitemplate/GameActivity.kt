@@ -66,8 +66,8 @@ class GameActivity: AppCompatActivity() {
         private fun clone(): MoveableTextView {
             val cloned = MoveableTextView(context, fixed, infinitive)
             cloned.text = text
-            (parent as LinearLayout).addView(cloned)
             cloned.visibility = View.INVISIBLE
+            (parent as LinearLayout).addView(cloned)
             return cloned
         }
     }
