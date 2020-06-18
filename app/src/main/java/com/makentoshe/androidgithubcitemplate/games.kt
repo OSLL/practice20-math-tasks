@@ -38,10 +38,15 @@ fun game3(hard:Int):Pair<String,String> {
     }
     return Pair(ans + '=' + result,query+'='+result)
 }
-fun hint(query:String,ans:String):Pair<Char,Int>{
+fun hint(task : Pair<String, String>) : Pair<String, Char> {
+    val query = task.first
+    val ans = task.second
     for(i in 0..query.lastIndex){
         if(query[i]!=ans[i])
-            return Pair(ans[i],i)
+            return Pair(
+                query.substring(0, i) + ans[i] + query.substring(i, query.lastIndex + 1),
+                ans[i]
+            )
     }
-    return Pair('(',-1)
+    return Pair(task.first, ' ')
 }
