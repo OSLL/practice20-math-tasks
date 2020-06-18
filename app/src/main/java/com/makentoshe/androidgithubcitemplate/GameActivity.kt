@@ -29,6 +29,8 @@ class GameActivity: AppCompatActivity() {
         private val fixed : Boolean,
         var infinitive : Boolean
     ) : AppCompatTextView(context) {
+        var task = false
+
         init {
             layoutParams = ViewGroup.LayoutParams(
                 TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 25f, resources.displayMetrics).toInt(),
@@ -47,7 +49,7 @@ class GameActivity: AppCompatActivity() {
 
             return when (event?.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    val target = if(infinitive) clone() else this
+                    val target = if(infinitive && !task) clone() else this
                     val data = ClipData.newPlainText("", "")
                     val dsb = DragShadowBuilder(this)
                     if (Build.VERSION.SDK_INT >= 24) {
@@ -84,6 +86,7 @@ class GameActivity: AppCompatActivity() {
         private var beginIndex = -2
         private var index = -2
         private var text = ""
+        private var dropped = false
 
         override fun onDrag(v: View?, event: DragEvent?): Boolean {
             if(event == null) return false
@@ -93,6 +96,7 @@ class GameActivity: AppCompatActivity() {
             val dragView = event.localState as MoveableTextView
             return when (event.action) {
                 DragEvent.ACTION_DRAG_STARTED -> {
+                    dropped = false
                     beginIndex = vll.indexOfChild(dragView)
                     println(beginIndex)
                     vll.removeView(dragView)
@@ -130,7 +134,8 @@ class GameActivity: AppCompatActivity() {
                     true
                 }
                 DragEvent.ACTION_DROP -> {
-                    dragView.infinitive = false
+                    dragView.task = true
+                    dropped = true
                     true
                 }
 
@@ -138,9 +143,9 @@ class GameActivity: AppCompatActivity() {
                     vll.removeView(dragView)
                     dragView.text = text
                     dragView.visibility = View.VISIBLE
-                    if(event.result)
+                    if(event.result && dropped)
                         vll.addView(dragView, index)
-                    else if(beginIndex != -1)
+                    if(!event.result && beginIndex != -1)
                         vll.addView(dragView, beginIndex)
                     index = -2
                     true
@@ -153,6 +158,36 @@ class GameActivity: AppCompatActivity() {
             }
         }
 
+    }
+
+    private class SymbolsOnDragListener : View.OnDragListener {
+        private var dropped = false
+
+        override fun onDrag(v: View?, event: DragEvent?): Boolean {
+            if(event == null)
+                return false
+
+            val vll = v as LinearLayout
+
+            val dragView = event.localState as MoveableTextView
+            return when (event.action) {
+                DragEvent.ACTION_DRAG_STARTED -> {
+                    dropped = false
+                    vll.removeView(dragView)
+                    true
+                }
+                DragEvent.ACTION_DRAG_ENDED -> {
+                    if ((!event.result || dropped) && !dragView.infinitive)
+                        vll.addView(dragView)
+                    true
+                }
+                DragEvent.ACTION_DROP -> {
+                    dropped = true
+                    true
+                }
+                else -> true
+            }
+        }
     }
 
     private fun setTaskLayout(task : String) {
@@ -223,41 +258,13 @@ class GameActivity: AppCompatActivity() {
 
 
 
-        var index = -2
-        val draggingView = MoveableTextView(this, true, false)
+
         var beginIndex = 0
 
 
         task_layout.setOnDragListener(TaskOnDragListener())
 
-        symbols_layout.setOnDragListener { v, event ->
-            val vll = v as LinearLayout
-
-            val dragView = event.localState as MoveableTextView
-            when (event.action) {
-                DragEvent.ACTION_DRAG_STARTED -> {
-                    val i = vll.indexOfChild(dragView)
-                    vll.removeView(dragView)
-                    //vll.addView(dragView, i)
-                    true
-                }
-                DragEvent.ACTION_DRAG_ENDED -> {
-                    if(!event.result && beginIndex == -1 && !dragView.infinitive)
-                        vll.addView(dragView)
-                    true
-                }
-                DragEvent.ACTION_DROP -> {
-                    task_layout.removeView(dragView)
-                    if(!dragView.text.toString()[0].isDigit())
-                        dragView.infinitive = true
-                    if(!dragView.infinitive)
-                        vll.addView(dragView)
-                    beginIndex = -1
-                    true
-                }
-                else -> true
-            }
-        }
+        symbols_layout.setOnDragListener(SymbolsOnDragListener())
         var exclude = ""
 
         var task = task()
