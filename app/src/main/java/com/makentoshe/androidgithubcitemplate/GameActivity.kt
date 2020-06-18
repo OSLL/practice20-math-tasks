@@ -20,19 +20,24 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
 import kotlinx.android.synthetic.main.activity_game.*
+import kotlinx.android.synthetic.main.activity_game.view.*
 
 
 class GameActivity: AppCompatActivity() {
 
-    class MovableTextView(context : Context, private val fixed : Boolean) : AppCompatTextView(context) {
+    class MoveableTextView(
+        context : Context,
+        private val fixed : Boolean,
+        var infinitive : Boolean
+    ) : AppCompatTextView(context) {
         init {
             layoutParams = ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
+                TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 25f, resources.displayMetrics).toInt(),
+                ViewGroup.LayoutParams.MATCH_PARENT
             )
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 40f)
             setTextColor(Color.parseColor("#E65A5A"))
-
+            textAlignment = View.TEXT_ALIGNMENT_CENTER
 
         }
 
@@ -43,10 +48,11 @@ class GameActivity: AppCompatActivity() {
 
             return when (event?.action) {
                 MotionEvent.ACTION_DOWN -> {
+                    val target = if(infinitive) clone() else this
                     val data = ClipData.newPlainText("", "")
                     val dsb = DragShadowBuilder(this)
                     if (Build.VERSION.SDK_INT >= 24) {
-                        startDragAndDrop(data, dsb, this, 0)
+                        target.startDragAndDrop(data, dsb, target, 0)
                     } else {
                         startDrag(data, dsb, this, 0)
                     }
@@ -55,14 +61,22 @@ class GameActivity: AppCompatActivity() {
                 else -> false
             }
         }
+
+        private fun clone(): MoveableTextView {
+            val cloned = MoveableTextView(context, fixed, infinitive)
+            cloned.text = text
+            (parent as LinearLayout).addView(cloned)
+            cloned.visibility = View.INVISIBLE
+            return cloned
+        }
     }
 
     private fun task() : Pair<String, String> {
         val hard = intent.getIntExtra("difficulty", 1) + 1
 
         return when(intent.getIntExtra("mode", 1)) {
-            0 -> game2(hard)
-            1 -> game1(hard)
+            0 -> game1(hard)
+            1 -> game2(hard)
             else -> game3(hard)
         }
     }
@@ -71,24 +85,33 @@ class GameActivity: AppCompatActivity() {
 
         task_layout.removeAllViews()
 
-        var text : MovableTextView
+        var text : MoveableTextView
 
         for(a in task) {
-            text = MovableTextView(this, true)
+            text = MoveableTextView(this, true, false)
             text.text = a.toString()
 
             task_layout.addView(text)
         }
     }
 
-    private fun setSymbolsLayout(symbols : String) {
+    private fun setSymbolsLayout() {
 
         symbols_layout.removeAllViews()
 
-        var text : MovableTextView
+        var text : MoveableTextView
+
+        var symbols = when(intent.getIntExtra("mode", 1)) {
+            0 -> "123456789"
+            1 -> "+-*"
+            else -> "123456789+-*"
+        }
+
+        if(intent.getIntExtra("difficulty", 1) == 2)
+            symbols += "^%&|"
 
         for(a in symbols) {
-            text = MovableTextView(this, false)
+            text = MoveableTextView(this, false, !a.isDigit())
             text.text = a.toString()
 
             symbols_layout.addView(text)
@@ -124,15 +147,14 @@ class GameActivity: AppCompatActivity() {
 
 
         var index = -2
-        val draggingView = TextView(this)
-        draggingView.layoutParams = ViewGroup.LayoutParams(50, ViewGroup.LayoutParams.MATCH_PARENT)
+        val draggingView = MoveableTextView(this, true, false)
         var beginIndex = 0
 
 
         task_layout.setOnDragListener { v, event ->
             val vll = v as LinearLayout
 
-            val dragView = event.localState as View
+            val dragView = event.localState as MoveableTextView
             when (event.action) {
                 DragEvent.ACTION_DRAG_STARTED -> {
                     beginIndex = task_layout.indexOfChild(dragView)
@@ -158,7 +180,6 @@ class GameActivity: AppCompatActivity() {
                             vll.getChildAt(i).x + vll.getChildAt(i).width / 2 <= event.x + dragView.width / 2
                         ) index = i
                     }
-                    println("begi = $begi")
 
                     if(begi != index) {
                         task_layout.removeView(draggingView)
@@ -173,6 +194,7 @@ class GameActivity: AppCompatActivity() {
                 }
                 DragEvent.ACTION_DROP -> {
                     task_layout.addView(dragView, index)
+                    dragView.infinitive = false
                     true
                 }
 
@@ -185,7 +207,7 @@ class GameActivity: AppCompatActivity() {
                 }
                 else -> {
                     // An unknown action type was received.
-                    Log.e("DragDrop Example", "Unknown action type received by OnDragListener.")
+                    Log.e("DragDrop", "Unknown action type received by OnDragListener.")
                     false
                 }
             }
@@ -194,15 +216,26 @@ class GameActivity: AppCompatActivity() {
         symbols_layout.setOnDragListener { v, event ->
             val vll = v as LinearLayout
 
-            val dragView = event.localState as View
+            val dragView = event.localState as MoveableTextView
             when (event.action) {
                 DragEvent.ACTION_DRAG_STARTED -> {
+                    val i = vll.indexOfChild(dragView)
                     vll.removeView(dragView)
+                    //vll.addView(dragView, i)
                     true
                 }
                 DragEvent.ACTION_DRAG_ENDED -> {
-                    if(!event.result && beginIndex == -1)
+                    if(!event.result && beginIndex == -1 && !dragView.infinitive)
                         vll.addView(dragView)
+                    true
+                }
+                DragEvent.ACTION_DROP -> {
+                    task_layout.removeView(dragView)
+                    if(!dragView.text.toString()[0].isDigit())
+                        dragView.infinitive = true
+                    if(!dragView.infinitive)
+                        vll.addView(dragView)
+                    beginIndex = -1
                     true
                 }
                 else -> true
@@ -212,13 +245,13 @@ class GameActivity: AppCompatActivity() {
         var task = task()
 
         setTaskLayout(task.first)
-        setSymbolsLayout("123456789")
+        setSymbolsLayout()
 
         skipButton.setOnClickListener {
             skipButton.setText(R.string.skip_button)
             task = task()
             setTaskLayout(task.first)
-            setSymbolsLayout("123456789")
+            setSymbolsLayout()
         }
 
         checkButton.setOnClickListener {
