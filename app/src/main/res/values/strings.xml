@@ -21,8 +21,8 @@
         <item>Nightmare!!!</item>
     </string-array>
     <string-array name="mode">
-        <item>Place signs</item>
         <item>Place digits</item>
+        <item>Place signs</item>
         <item>Mixed</item>
     </string-array>
 </resources>
