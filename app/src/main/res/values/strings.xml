@@ -8,6 +8,7 @@
     <string name="game_mode_annotation">Game mode:</string>
     <string name="difficulty_annotation">Difficulty: %s</string>
     <string name="skip_button">Skip</string>
+    <string name="next_button">Next</string>
     <string name="check_button">Check</string>
     <string name="hint_button">Hint</string>
     <string name="mode_annotation">Mode: %s</string>
