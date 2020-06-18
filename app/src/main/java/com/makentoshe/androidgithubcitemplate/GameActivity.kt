@@ -83,7 +83,7 @@ class GameActivity: AppCompatActivity() {
     }
 
     private class TaskOnDragListener : View.OnDragListener {
-        private var beginIndex = -2
+        private var beginIndex = -1
         private var index = -2
         private var text = ""
         private var dropped = false
@@ -143,7 +143,7 @@ class GameActivity: AppCompatActivity() {
                     vll.removeView(dragView)
                     dragView.text = text
                     dragView.visibility = View.VISIBLE
-                    if(event.result && dropped)
+                    if(dropped)
                         vll.addView(dragView, index)
                     if(!event.result && beginIndex != -1)
                         vll.addView(dragView, beginIndex)
@@ -162,6 +162,7 @@ class GameActivity: AppCompatActivity() {
 
     private class SymbolsOnDragListener : View.OnDragListener {
         private var dropped = false
+        private var beginIndex = -1
 
         override fun onDrag(v: View?, event: DragEvent?): Boolean {
             if(event == null)
@@ -172,13 +173,14 @@ class GameActivity: AppCompatActivity() {
             val dragView = event.localState as MoveableTextView
             return when (event.action) {
                 DragEvent.ACTION_DRAG_STARTED -> {
+                    beginIndex = vll.indexOfChild(dragView)
                     dropped = false
                     vll.removeView(dragView)
                     true
                 }
                 DragEvent.ACTION_DRAG_ENDED -> {
-                    if ((!event.result || dropped) && !dragView.infinitive)
-                        vll.addView(dragView)
+                    if ((!event.result && beginIndex != -1 || dropped) && !dragView.infinitive)
+                        vll.addView(dragView, beginIndex)
                     true
                 }
                 DragEvent.ACTION_DROP -> {
@@ -259,7 +261,6 @@ class GameActivity: AppCompatActivity() {
 
 
 
-        var beginIndex = 0
 
 
         task_layout.setOnDragListener(TaskOnDragListener())
