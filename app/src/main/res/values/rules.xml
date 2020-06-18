@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <string name="rules">
-    \n\n\n\n\n#####################################
+    \n\n\n\n
     For all modes and difficulties your target is to make correct mathematical expression.
-    #####################################\n\n
-
-    #####################################
+    \n\n
     For all difficulties in mode "Place digits" you can use
     digits:1,2,3,4,5,6,7,8,9 and only one time!!!\n
     And also from digits you can make numbers,but solution which use only digits(without numbers) exists!!!
-    #####################################\n\n
+    \n\n
 
-    #####################################
+
     Difficulty:\n
     #1."I\'m too young to die" - it is the easiest difficulty. Here you
     can use only +(add), -(subtract), *(multiply) and digits:1,2,3,4,5,
@@ -21,13 +19,11 @@
     #3"Nightmare!!!" - is the hardest difficulty. It is similar to first and second
     difficulties but in addition contains operations |(logical or), &amp;(logical and), ^(xor),%(returns remainder of the division)
     (Read about it on Wiki, if you don\'t know those operations) and from 7 to 9 operations.
-    ######################################\n\n
+    \n\n
 
-    ######################################
     Modes:\n
     1."Place digits" - you need to place digits between operations.\n
     2."Place signs" - you need to place operations between digits.\n
     3."Mixed" - you need to place digits and operations between each other
-    ######################################
 </string>
 </resources>
