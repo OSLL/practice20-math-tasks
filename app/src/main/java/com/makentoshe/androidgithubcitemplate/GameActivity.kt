@@ -20,7 +20,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
 import kotlinx.android.synthetic.main.activity_game.*
-import kotlinx.android.synthetic.main.activity_game.view.*
 
 
 class GameActivity: AppCompatActivity() {
@@ -71,7 +70,7 @@ class GameActivity: AppCompatActivity() {
         }
     }
 
-    private fun task() : String {
+    private fun task() : Pair<String, String> {
         val hard = intent.getIntExtra("difficulty", 1) + 1
 
         return when(intent.getIntExtra("mode", 1)) {
@@ -95,7 +94,7 @@ class GameActivity: AppCompatActivity() {
         }
     }
 
-    private fun setSymbolsLayout() {
+    private fun setSymbolsLayout(exclude: String = "") {
 
         symbols_layout.removeAllViews()
 
@@ -111,10 +110,13 @@ class GameActivity: AppCompatActivity() {
             symbols += "^%&|"
 
         for(a in symbols) {
-            text = MoveableTextView(this, false, !a.isDigit())
-            text.text = a.toString()
+            if(!a.isDigit() || a !in exclude) {
 
-            symbols_layout.addView(text)
+                text = MoveableTextView(this, false, !a.isDigit())
+                text.text = a.toString()
+
+                symbols_layout.addView(text)
+            }
         }
     }
 
@@ -241,15 +243,18 @@ class GameActivity: AppCompatActivity() {
                 else -> true
             }
         }
+        var exclude = ""
 
         var task = task()
 
-        setTaskLayout(task)
+        setTaskLayout(task.first)
         setSymbolsLayout()
 
         skipButton.setOnClickListener {
+            skipButton.setText(R.string.skip_button)
             task = task()
-            setTaskLayout(task)
+            exclude = ""
+            setTaskLayout(task.first)
             setSymbolsLayout()
         }
 
@@ -270,15 +275,26 @@ class GameActivity: AppCompatActivity() {
             try {
                 if (Solver().solve(left) == Solver().solve(right)) {
                     Toast.makeText(this, "Correct!", Toast.LENGTH_SHORT).show()
-                    task = task()
-                    setTaskLayout(task)
-                    setSymbolsLayout()
+                    skipButton.setText(R.string.next_button)
                 }
                 else
                     Toast.makeText(this, "Incorrect :(", Toast.LENGTH_SHORT).show()
             } catch (e : Exception) {
                 e.printStackTrace()
             }
+        }
+
+
+        hintButton.setOnClickListener {
+            val hint = hint(task)
+            task = Pair(hint.first, task.second)
+
+            setTaskLayout(hint.first)
+            exclude += hint.second
+            setSymbolsLayout(exclude)
+
+            if(hint.second == ' ')
+                Toast.makeText(this, "Чего тебе ещё надо, собака?", Toast.LENGTH_SHORT).show()
         }
 
     }

@@ -51,6 +51,10 @@ class Solver {
                 getNextToken()
                 -prim()
             }
+            '+' -> {
+                getNextToken()
+                prim()
+            }
             '(' -> {
                 getNextToken()
                 val e = operPlus()
