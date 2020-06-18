@@ -13,7 +13,6 @@
     <string name="hint_button">Hint</string>
     <string name="mode_annotation">Mode: %s</string>
     <string name="how_to_play_title">How to play?</string>
-    <string name="rules">*Здесь будут правила*</string>
     <string name="back_button">Back</string>
     <string name="start_game_button">Start game</string>
     <string-array name="difficulty">
