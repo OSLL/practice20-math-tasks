@@ -57,7 +57,7 @@ class GameActivity: AppCompatActivity() {
         }
     }
 
-    private fun task() : String {
+    private fun task() : Pair<String, String> {
         val hard = intent.getIntExtra("difficulty", 1) + 1
 
         return when(intent.getIntExtra("mode", 1)) {
@@ -211,12 +211,13 @@ class GameActivity: AppCompatActivity() {
 
         var task = task()
 
-        setTaskLayout(task)
+        setTaskLayout(task.first)
         setSymbolsLayout("123456789")
 
         skipButton.setOnClickListener {
+            skipButton.setText(R.string.skip_button)
             task = task()
-            setTaskLayout(task)
+            setTaskLayout(task.first)
             setSymbolsLayout("123456789")
         }
 
@@ -237,9 +238,7 @@ class GameActivity: AppCompatActivity() {
             try {
                 if (Solver().solve(left) == Solver().solve(right)) {
                     Toast.makeText(this, "Correct!", Toast.LENGTH_SHORT).show()
-                    task = task()
-                    setTaskLayout(task)
-                    setSymbolsLayout("123456789")
+                    skipButton.setText(R.string.next_button)
                 }
                 else
                     Toast.makeText(this, "Incorrect :(", Toast.LENGTH_SHORT).show()
@@ -247,6 +246,7 @@ class GameActivity: AppCompatActivity() {
                 e.printStackTrace()
             }
         }
+
 
     }
 }
