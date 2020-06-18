@@ -4,7 +4,7 @@ import com.makentoshe.androidgithubcitemplate.Solver
 fun game1(hard:Int):Pair<String,String> {
     var query = gen2_game(hard)
     var ans = ""
-    var result = Solver().solve(query).toInt()
+    var result = Solver().solve(query).toInt()  
     for (i in 0..query.lastIndex) {
         if (!query[i].isDigit())
             ans += query[i]
