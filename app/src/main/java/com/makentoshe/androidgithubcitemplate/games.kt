@@ -1,7 +1,7 @@
 package com.makentoshe.androidgithubcitemplate
 import com.makentoshe.androidgithubcitemplate.gen2_game
 import com.makentoshe.androidgithubcitemplate.Solver
-fun game1(hard:Int):String {
+fun game1(hard:Int):Pair<String,String> {
     var query = gen2_game(hard)
     var ans = ""
     var result = Solver().solve(query).toInt()
@@ -9,9 +9,9 @@ fun game1(hard:Int):String {
         if (!query[i].isDigit())
             ans += query[i]
     }
-    return ans + '=' + result
+    return Pair(ans + '=' + result,query+'='+result)
 }
-fun game2(hard:Int):String {
+fun game2(hard:Int):Pair<String,String> {
     var query = gen2_game(hard)
     var ans = ""
     var result = Solver().solve(query).toInt()
@@ -19,9 +19,9 @@ fun game2(hard:Int):String {
         if (query[i].isDigit())
             ans += query[i]
     }
-    return ans + '=' + result
+    return Pair(ans + '=' + result,query+'='+result)
 }
-fun game3(hard:Int):String {
+fun game3(hard:Int):Pair<String,String> {
     var query = gen2_game(hard)
     var ans = ""
     var result = Solver().solve(query).toInt()
@@ -36,5 +36,12 @@ fun game3(hard:Int):String {
         if (used[i] == 0)
             ans += query[i]
     }
-    return ans + '=' + result
+    return Pair(ans + '=' + result,query+'='+result)
+}
+fun hint(query:String,ans:String):Pair<Char,Int>{
+    for(i in 0..query.lastIndex){
+        if(query[i]!=ans[i])
+            return Pair(ans[i],i)
+    }
+    return Pair('(',-1)
 }
