@@ -24,7 +24,7 @@ import kotlinx.android.synthetic.main.activity_game.*
 
 class GameActivity: AppCompatActivity() {
 
-    class MoveableTextView(
+    class MovableTextView(
         context : Context,
         private val fixed : Boolean,
         var infinitive : Boolean
@@ -63,8 +63,8 @@ class GameActivity: AppCompatActivity() {
             }
         }
 
-        private fun clone(): MoveableTextView {
-            val cloned = MoveableTextView(context, fixed, infinitive)
+        private fun clone(): MovableTextView {
+            val cloned = MovableTextView(context, fixed, infinitive)
             cloned.text = text
             cloned.visibility = View.INVISIBLE
             (parent as LinearLayout).addView(cloned)
@@ -93,7 +93,7 @@ class GameActivity: AppCompatActivity() {
 
             val vll = v as LinearLayout
 
-            val dragView = event.localState as MoveableTextView
+            val dragView = event.localState as MovableTextView
             return when (event.action) {
                 DragEvent.ACTION_DRAG_STARTED -> {
                     dropped = false
@@ -170,7 +170,7 @@ class GameActivity: AppCompatActivity() {
 
             val vll = v as LinearLayout
 
-            val dragView = event.localState as MoveableTextView
+            val dragView = event.localState as MovableTextView
             return when (event.action) {
                 DragEvent.ACTION_DRAG_STARTED -> {
                     beginIndex = vll.indexOfChild(dragView)
@@ -196,10 +196,10 @@ class GameActivity: AppCompatActivity() {
 
         task_layout.removeAllViews()
 
-        var text : MoveableTextView
+        var text : MovableTextView
 
         for(a in task) {
-            text = MoveableTextView(this, true, false)
+            text = MovableTextView(this, true, false)
             text.text = a.toString()
 
             task_layout.addView(text)
@@ -210,7 +210,7 @@ class GameActivity: AppCompatActivity() {
 
         symbols_layout.removeAllViews()
 
-        var text : MoveableTextView
+        var text : MovableTextView
 
         var symbols = when(intent.getIntExtra("mode", 1)) {
             0 -> "123456789"
@@ -224,7 +224,7 @@ class GameActivity: AppCompatActivity() {
         for(a in symbols) {
             if(!a.isDigit() || a !in exclude) {
 
-                text = MoveableTextView(this, false, !a.isDigit())
+                text = MovableTextView(this, false, !a.isDigit())
                 text.text = a.toString()
 
                 symbols_layout.addView(text)
