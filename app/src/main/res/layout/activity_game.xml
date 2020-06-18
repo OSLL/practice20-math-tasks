@@ -81,6 +81,7 @@
         android:layout_height="50dp"
         android:layout_marginBottom="40dp"
         android:orientation="horizontal"
+        android:animateLayoutChanges="true"
         app:layout_constraintBottom_toTopOf="@+id/skipButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -90,6 +91,7 @@
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:orientation="horizontal"
+        android:animateLayoutChanges="true"
         app:layout_constraintBottom_toTopOf="@+id/symbols_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
