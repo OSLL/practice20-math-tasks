@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".GameActivity"
-    android:background = "#000000">
+    android:background="@drawable/fon"
+    tools:context=".GameActivity">
 
     <TextView
         android:id="@+id/difficulty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/astloch_bold"
+        android:padding="5sp"
         android:text="@string/difficulty_annotation"
-        android:textSize = "20sp"
-        android:textColor = "#FFFFFF"
-        android:padding = "5sp"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -22,10 +23,10 @@
         android:id="@+id/skipButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/skip_button"
-        android:textSize = "17sp"
-        android:textColor = "#FFFFFF"
         android:background="#999999"
+        android:text="@string/skip_button"
+        android:textColor="#FFFFFF"
+        android:textSize="17sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/checkButton"
         app:layout_constraintStart_toEndOf="@+id/hintButton" />
@@ -34,10 +35,10 @@
         android:id="@+id/checkButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="#30A4FF"
         android:text="@string/check_button"
-        android:background ="#30A4FF"
-        android:textSize = "17sp"
-        android:textColor = "#FFFFFF"
+        android:textColor="#FFFFFF"
+        android:textSize="17sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/skipButton" />
@@ -46,10 +47,10 @@
         android:id="@+id/hintButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="#30A4FF"
         android:text="@string/hint_button"
-        android:background ="#30A4FF"
-        android:textSize = "17sp"
-        android:textColor = "#FFFFFF"
+        android:textColor="#FFFFFF"
+        android:textSize="17sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/skipButton"
         app:layout_constraintStart_toStartOf="parent" />
@@ -58,10 +59,11 @@
         android:id="@+id/mode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/astloch_bold"
+        android:padding="5sp"
         android:text="@string/mode_annotation"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
-        android:padding = "5sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/difficulty" />
 
@@ -74,9 +76,9 @@
         app:srcCompat="@drawable/menu_icon_icon_icons_com_69140" />
 
     <LinearLayout
+        android:id="@+id/symbols_layout"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:id="@+id/symbols_layout"
         android:layout_marginBottom="40dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/skipButton"
