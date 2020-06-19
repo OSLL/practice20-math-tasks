@@ -179,8 +179,14 @@ class GameActivity: AppCompatActivity() {
                     true
                 }
                 DragEvent.ACTION_DRAG_ENDED -> {
-                    if ((!event.result && beginIndex != -1 || dropped) && !dragView.infinitive)
-                        vll.addView(dragView, beginIndex)
+                    try {
+                        if ((!event.result && beginIndex != -1 || dropped) && !dragView.infinitive) {
+                            (dragView.parent as? LinearLayout)?.removeView(dragView)
+                            vll.addView(dragView, beginIndex)
+                        }
+                    } catch (e : Exception) {
+                        e.printStackTrace()
+                    }
                     true
                 }
                 DragEvent.ACTION_DROP -> {
