@@ -126,7 +126,7 @@ class GameActivity: AppCompatActivity() {
                 DragEvent.ACTION_DRAG_LOCATION -> {
                     val begi = index
 
-                    index = -1
+                    index = 0
                     for (i in 0 until vll.childCount) {
                         if (
                             vll.getChildAt(i).x + vll.getChildAt(i).width / 2 <= event.x + dragView.width / 2
@@ -250,7 +250,7 @@ class GameActivity: AppCompatActivity() {
     }
 
     private fun widthFix(layout: LinearLayout) {
-        val maxWidth = (layout.parent as ConstraintLayout).width
+        val maxWidth = (layout.parent as ConstraintLayout).width - layout.paddingLeft - layout.paddingRight
         for(mtv in layout.children) {
             (mtv as MovableTextView).decreaseWidth(maxWidth / layout.childCount)
         }
