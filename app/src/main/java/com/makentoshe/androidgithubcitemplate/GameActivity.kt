@@ -9,16 +9,15 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
-import android.view.DragEvent
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.LinearLayout
 import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.children
 import kotlinx.android.synthetic.main.activity_game.*
 
 
@@ -38,8 +37,17 @@ class GameActivity: AppCompatActivity() {
             )
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 40f)
             setTextColor(Color.parseColor("#E65A5A"))
-            textAlignment = View.TEXT_ALIGNMENT_CENTER
+            gravity = Gravity.CENTER
 
+        }
+
+        fun decreaseWidth(newWidth : Int) {
+            if(newWidth < TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 25f, resources.displayMetrics).toInt()) {
+                val lp = layoutParams
+                setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize / width * newWidth)
+                lp.width = newWidth
+            }
+            requestLayout()
         }
 
         override fun onTouchEvent(event: MotionEvent?): Boolean {
@@ -238,6 +246,13 @@ class GameActivity: AppCompatActivity() {
         }
     }
 
+    private fun widthFix(layout: LinearLayout) {
+        val maxWidth = (layout.parent as ConstraintLayout).width - 20
+        for(mtv in layout.children) {
+            (mtv as MovableTextView).decreaseWidth(maxWidth / layout.childCount)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
@@ -265,7 +280,13 @@ class GameActivity: AppCompatActivity() {
         }
 
 
+        task_layout.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+            widthFix(v as LinearLayout)
+        }
 
+        symbols_layout.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+            widthFix(v as LinearLayout)
+        }
 
 
 
