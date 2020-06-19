@@ -250,7 +250,7 @@ class GameActivity: AppCompatActivity() {
     }
 
     private fun widthFix(layout: LinearLayout) {
-        val maxWidth = (layout.parent as ConstraintLayout).width - 20
+        val maxWidth = (layout.parent as ConstraintLayout).width
         for(mtv in layout.children) {
             (mtv as MovableTextView).decreaseWidth(maxWidth / layout.childCount)
         }
