@@ -29,10 +29,11 @@ class GameActivity: AppCompatActivity() {
         var infinitive : Boolean
     ) : AppCompatTextView(context) {
         var task = false
+        private val standWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 25f, resources.displayMetrics).toInt()
 
         init {
             layoutParams = ViewGroup.LayoutParams(
-                TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 25f, resources.displayMetrics).toInt(),
+                standWidth,
                 ViewGroup.LayoutParams.MATCH_PARENT
             )
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 40f)
@@ -42,11 +43,13 @@ class GameActivity: AppCompatActivity() {
         }
 
         fun decreaseWidth(newWidth : Int) {
-            if(newWidth < TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 25f, resources.displayMetrics).toInt()) {
-                val lp = layoutParams
-                setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize / width * newWidth)
-                lp.width = newWidth
+            var tempNewWidth = newWidth
+            if(tempNewWidth > standWidth) {
+                tempNewWidth = standWidth
             }
+            val lp = layoutParams
+            setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize / width * tempNewWidth)
+            lp.width = tempNewWidth
             requestLayout()
         }
 
