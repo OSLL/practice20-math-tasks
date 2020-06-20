@@ -4,7 +4,7 @@ import com.makentoshe.androidgithubcitemplate.Solver
 fun game1(hard:Int):Pair<String,String> {
     var query = gen2_game(hard)
     var ans = ""
-    var result = Solver().solve(query).toInt()  
+    var result = Solver.solve(query).toInt()
     for (i in 0..query.lastIndex) {
         if (!query[i].isDigit())
             ans += query[i]
@@ -14,7 +14,7 @@ fun game1(hard:Int):Pair<String,String> {
 fun game2(hard:Int):Pair<String,String> {
     var query = gen2_game(hard)
     var ans = ""
-    var result = Solver().solve(query).toInt()
+    var result = Solver.solve(query).toInt()
     for (i in 0..query.lastIndex) {
         if (query[i].isDigit())
             ans += query[i]
@@ -24,7 +24,7 @@ fun game2(hard:Int):Pair<String,String> {
 fun game3(hard:Int):Pair<String,String> {
     var query = gen2_game(hard)
     var ans = ""
-    var result = Solver().solve(query).toInt()
+    var result = Solver.solve(query).toInt()
     var used: Array<Int> = Array(query.length, { i -> 0 })
     var it = 0
     while (it < query.length / 2) {

@@ -326,7 +326,7 @@ class GameActivity: AppCompatActivity() {
                 }
             }
             try {
-                if (Solver().solve(left) == Solver().solve(right)) {
+                if (Solver.solve(left) == Solver.solve(right)) {
                     Toast.makeText(this, "Correct!", Toast.LENGTH_SHORT).show()
                     skipButton.setText(R.string.next_button)
                 }
