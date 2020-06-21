@@ -1,6 +1,5 @@
-package com.makentoshe.androidgithubcitemplate
-import com.makentoshe.androidgithubcitemplate.gen2_game
-import com.makentoshe.androidgithubcitemplate.Solver
+package com.internat239.digitality
+
 fun game1(hard:Int):Pair<String,String> {
     var query = gen2_game(hard)
     var ans = ""

@@ -1,11 +1,8 @@
-package com.makentoshe.androidgithubcitemplate
+package com.internat239.digitality
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.Window
-import androidx.core.text.isDigitsOnly
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 

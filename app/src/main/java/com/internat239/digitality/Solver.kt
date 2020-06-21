@@ -1,4 +1,4 @@
-package com.makentoshe.androidgithubcitemplate
+package com.internat239.digitality
 
 class Solver {
     companion object {
