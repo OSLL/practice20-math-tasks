@@ -1,4 +1,5 @@
-package com.makentoshe.androidgithubcitemplate;
+package com.internat239.digitality
+
 fun gen2_game(hard:Int):String {
     var operations: String = " +-*^%&|"
     var ans: String = ""
