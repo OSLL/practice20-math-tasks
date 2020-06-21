@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "744300044266",
+    "firebase_url": "https://digitality-43b8e.firebaseio.com",
+    "project_id": "digitality-43b8e",
+    "storage_bucket": "digitality-43b8e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:744300044266:android:73c85dc1ef019d7cc61c93",
+        "android_client_info": {
+          "package_name": "com.internat239.digitality"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "744300044266-a5jnbii4vp298d3ruthu1np0hdconnu7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCunPKKhQFTHbPtk_BwN_VONcrPi5VsowE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "744300044266-a5jnbii4vp298d3ruthu1np0hdconnu7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
