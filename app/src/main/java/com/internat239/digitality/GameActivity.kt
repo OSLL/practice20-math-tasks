@@ -19,9 +19,13 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.children
 import kotlinx.android.synthetic.main.activity_game.*
+import java.util.*
 
 
 class GameActivity: AppCompatActivity() {
+
+    private var statistics = Statistics()
+    private lateinit var gameStats : Statistics.Companion.GameStats
 
     class MovableTextView(
         context : Context,
@@ -83,15 +87,6 @@ class GameActivity: AppCompatActivity() {
         }
     }
 
-    private fun task() : Pair<String, String> {
-        val hard = intent.getIntExtra("difficulty", 1) + 1
-
-        return when(intent.getIntExtra("mode", 1)) {
-            0 -> game1(hard)
-            1 -> game2(hard)
-            else -> game3(hard)
-        }
-    }
 
     private class TaskOnDragListener : View.OnDragListener {
         private var beginIndex = -1
@@ -256,6 +251,23 @@ class GameActivity: AppCompatActivity() {
         }
     }
 
+    private fun task(difficulty : Int, mode : Int) : Pair<String, String> {
+        return when(mode) {
+            0 -> game1(difficulty)
+            1 -> game2(difficulty)
+            else -> game3(difficulty)
+        }
+    }
+
+    private fun createTask() : Pair<String, String> {
+        val difficulty = intent.getIntExtra("difficulty", 0) + 1
+        val mode = intent.getIntExtra("mode", 0)
+        val task = task(difficulty, mode)
+        gameStats = Statistics.Companion.GameStats(difficulty, mode, task.first, task.second, task.second.length - task.first.length)
+        return task
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
@@ -282,6 +294,17 @@ class GameActivity: AppCompatActivity() {
             menu.show()
         }
 
+        button.setOnDragListener { _, event ->
+            when(event.action) {
+                DragEvent.ACTION_DRAG_STARTED -> {
+                    gameStats.moves++
+                    true
+                }
+                else -> true
+            }
+        }
+
+        statistics = Statistics.get(getString(R.string.stat_path), this)
 
         task_layout.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
             widthFix(v as LinearLayout)
@@ -298,14 +321,18 @@ class GameActivity: AppCompatActivity() {
         symbols_layout.setOnDragListener(SymbolsOnDragListener())
         var exclude = ""
 
-        var task = task()
+        var task = createTask()
 
         setTaskLayout(task.first)
         setSymbolsLayout()
 
         skipButton.setOnClickListener {
+            if(!gameStats.result)
+                gameStats.endTime = Calendar.getInstance().time
+            statistics.addGame(gameStats)
+
             skipButton.setText(R.string.skip_button)
-            task = task()
+            task = createTask()
             exclude = ""
             setTaskLayout(task.first)
             setSymbolsLayout()
@@ -329,6 +356,8 @@ class GameActivity: AppCompatActivity() {
                 if (Solver.solve(left) == Solver.solve(right)) {
                     Toast.makeText(this, "Correct!", Toast.LENGTH_SHORT).show()
                     skipButton.setText(R.string.next_button)
+                    gameStats.result = true
+                    gameStats.endTime = Calendar.getInstance().time
                 }
                 else
                     Toast.makeText(this, "Incorrect :(", Toast.LENGTH_SHORT).show()
@@ -342,13 +371,24 @@ class GameActivity: AppCompatActivity() {
             val hint = hint(task)
             task = Pair(hint.first, task.second)
 
+            gameStats.hintsCount++
             setTaskLayout(hint.first)
-            exclude += hint.second
-            setSymbolsLayout(exclude)
 
-            if(hint.second == ' ')
+            if(hint.second != ' ') {
+                exclude += hint.second
+                setSymbolsLayout(exclude)
+
+                gameStats.moves++
+            }
+            else {
                 Toast.makeText(this, "Чего тебе ещё надо, собака?", Toast.LENGTH_SHORT).show()
+            }
         }
 
+    }
+
+    override fun finish() {
+        statistics.save(getString(R.string.stat_path), this)
+        super.finish()
     }
 }
