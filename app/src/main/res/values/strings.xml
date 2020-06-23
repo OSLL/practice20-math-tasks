@@ -15,6 +15,7 @@
     <string name="how_to_play_title">How to play?</string>
     <string name="back_button">Back</string>
     <string name="start_game_button">Start game</string>
+    <string name="statistics_button">Statistics</string>
     <string-array name="difficulty">
         <item>I\'m too young to die</item>
         <item>Hurt me plenty</item>
