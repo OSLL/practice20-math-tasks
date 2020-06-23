@@ -25,7 +25,7 @@ import java.util.*
 class GameActivity: AppCompatActivity() {
 
     private var statistics = Statistics()
-    private var gameStats = Statistics.Companion.GameStats()
+    private lateinit var gameStats : Statistics.Companion.GameStats
 
     class MovableTextView(
         context : Context,

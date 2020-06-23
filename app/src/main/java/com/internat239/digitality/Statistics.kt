@@ -1,12 +1,10 @@
-package com.makentoshe.androidgithubcitemplate
+package com.internat239.digitality
 
 import android.content.Context
-import java.io.ObjectInputStream
-import java.io.ObjectOutputStream
-import java.io.Serializable
+import com.google.gson.Gson
 import java.util.*
 
-class Statistics : Serializable {
+class Statistics {
 
     var gamesCount = 0
         private set
@@ -34,12 +32,12 @@ class Statistics : Serializable {
         addGame(GameStats(difficulty, mode, task, answer, moves, minMoves, timeStart, timeEnd, hintsCount, result))
     }
 
-    fun save(file : String, context: Context) {
-        val fos = context.openFileOutput(file, Context.MODE_PRIVATE)
-        val os = ObjectOutputStream(fos)
-        os.writeObject(this)
-        os.close()
-        fos.close()
+    fun save(fileName : String, context: Context) {
+        val file = context.getFileStreamPath(fileName)
+        if(!file.exists()) {
+            file.createNewFile()
+        }
+        file.writeText(Gson().toJson(this))
     }
 
     override fun toString(): String {
@@ -62,7 +60,7 @@ class Statistics : Serializable {
             var endTime : Date,
             var hintsCount : Int,
             var result : Boolean
-        ) : Serializable {
+        ) {
             constructor() : this(0, 0, "", "", 0, 0, Date(), Date(), 0, false)
             constructor(
                 difficulty: Int,
@@ -90,14 +88,14 @@ class Statistics : Serializable {
             }
         }
 
-        fun get(file : String, context: Context) : Statistics {
-            if (file != "") {
-                val fi = context.openFileInput(file)
-                val ois = ObjectInputStream(fi)
-                val s = (ois.readObject() as Statistics)
-                ois.close()
-                fi.close()
-                return s
+        fun get(fileName : String, context: Context) : Statistics {
+            if (fileName != "") {
+                val file = context.getFileStreamPath(fileName)
+                if(!file.exists()) {
+                    file.createNewFile()
+                    Statistics().save(fileName, context)
+                }
+                return Gson().fromJson(file.readText(), Statistics::class.java)
             }
             return Statistics()
         }
