@@ -11,14 +11,6 @@
         android:src="@drawable/background_lamp"
         android:scaleType="centerCrop" />
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/background_lamp"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="328dp" />
-
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
@@ -69,21 +61,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.60" />
-    <Button
+
+    <com.google.android.gms.common.SignInButton
         android:id="@+id/signInButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#30A4FF"
-        android:paddingStart="50sp"
-        android:paddingTop="10sp"
-        android:paddingEnd="50sp"
-        android:paddingBottom="10sp"
-        android:text="Войти"
-        android:textColor="#FFFFFF"
-        android:textSize="30sp"
+        android:layout_centerInParent="true"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/settingsButton"
-        app:layout_constraintVertical_bias="0.60" />
+        app:layout_constraintTop_toTopOf="@+id/helpButton" />
+    <Button
+        android:id="@+id/signOutButton"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_width="230dp"
+        android:layout_height="wrap_content"
+        android:text="Выйти"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/helpButton"
+        android:visibility="gone"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
