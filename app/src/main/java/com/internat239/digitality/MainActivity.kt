@@ -36,6 +36,8 @@ class MainActivity : AppCompatActivity() {
         googleSignInClient = GoogleSignIn.getClient(this, gso)
         auth = FirebaseAuth.getInstance()
 
+        updateUI(auth.currentUser)
+
         helpButton.setOnClickListener {
             val intent = Intent(this, HelpActivity::class.java)
             startActivity(intent)

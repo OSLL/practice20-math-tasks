@@ -18,6 +18,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.children
+import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_game.*
 import java.util.*
 
@@ -268,6 +272,18 @@ class GameActivity: AppCompatActivity() {
     }
 
 
+    private fun getStats() {
+
+        val user = FirebaseAuth.getInstance().currentUser
+        var statisticsCloud : Statistics? = null
+        statistics = Statistics.getLocal(getString(R.string.stat_path), this)
+        if(user != null)
+            statisticsCloud = Statistics.getCloud(Firebase.firestore, user.uid)
+
+        if(statisticsCloud != null && statisticsCloud.gamesCount >= statistics.gamesCount)
+            statistics = statisticsCloud
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
@@ -304,7 +320,9 @@ class GameActivity: AppCompatActivity() {
             }
         }
 
-        statistics = Statistics.get(getString(R.string.stat_path), this)
+
+        getStats()
+
 
         task_layout.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
             widthFix(v as LinearLayout)
@@ -388,7 +406,10 @@ class GameActivity: AppCompatActivity() {
     }
 
     override fun finish() {
-        statistics.save(getString(R.string.stat_path), this)
+        statistics.saveLocal(getString(R.string.stat_path), this)
+        val user = FirebaseAuth.getInstance().currentUser
+        if(user != null)
+            statistics.updateCloud(Firebase.firestore, user.uid)
         super.finish()
     }
 }

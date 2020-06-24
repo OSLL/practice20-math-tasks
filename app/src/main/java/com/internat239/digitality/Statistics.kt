@@ -1,6 +1,8 @@
 package com.internat239.digitality
 
 import android.content.Context
+import com.google.firebase.Timestamp
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import java.util.*
 
@@ -32,12 +34,18 @@ class Statistics {
         addGame(GameStats(difficulty, mode, task, answer, moves, minMoves, timeStart, timeEnd, hintsCount, result))
     }
 
-    fun save(fileName : String, context: Context) {
+    fun saveLocal(fileName : String, context: Context) {
         val file = context.getFileStreamPath(fileName)
         if(!file.exists()) {
             file.createNewFile()
         }
         file.writeText(Gson().toJson(this))
+    }
+
+    fun updateCloud(db: FirebaseFirestore, userId: String) {
+        val gson = Gson()
+        val map = gson.fromJson<Map<String, Any>>(gson.toJson(this), Map::class.java)
+        db.collection("user-stats").document(userId).set(map)
     }
 
     override fun toString(): String {
@@ -88,16 +96,29 @@ class Statistics {
             }
         }
 
-        fun get(fileName : String, context: Context) : Statistics {
+        fun getLocal(fileName : String, context: Context) : Statistics {
             if (fileName != "") {
                 val file = context.getFileStreamPath(fileName)
                 if(!file.exists()) {
                     file.createNewFile()
-                    Statistics().save(fileName, context)
+                    Statistics().saveLocal(fileName, context)
                 }
                 return Gson().fromJson(file.readText(), Statistics::class.java)
             }
             return Statistics()
+        }
+
+        fun getCloud(db: FirebaseFirestore, userId: String) : Statistics? {
+            var res : Statistics? = null
+            val gson = Gson()
+            db.collection("user-stats").document(userId).get().addOnCompleteListener { task ->
+                res = if (task.isSuccessful) {
+                    gson.fromJson(gson.toJsonTree(task.result!!.data), Statistics::class.java)
+                } else {
+                    null
+                }
+            }
+            return res
         }
     }
 }
