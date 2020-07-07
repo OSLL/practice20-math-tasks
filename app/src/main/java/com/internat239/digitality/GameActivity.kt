@@ -361,6 +361,8 @@ class GameActivity: AppCompatActivity() {
             var right = ""
             var side = false
 
+            gameStats.attemptsCount++
+
             for(i in 0 until task_layout.childCount) {
                 if((task_layout.getChildAt(i) as TextView).text == "=") {
                     side = true
@@ -370,6 +372,9 @@ class GameActivity: AppCompatActivity() {
                     right += (task_layout.getChildAt(i) as TextView).text
                 }
             }
+
+            gameStats.userAnswer = "$left=$right"
+
             try {
                 if (Solver.solve(left) == Solver.solve(right)) {
                     Toast.makeText(this, "Correct!", Toast.LENGTH_SHORT).show()
@@ -377,10 +382,11 @@ class GameActivity: AppCompatActivity() {
                     gameStats.result = true
                     gameStats.endTime = Calendar.getInstance().time
                 }
-                else
+                else {
                     Toast.makeText(this, "Incorrect :(", Toast.LENGTH_SHORT).show()
+                }
             } catch (e : Exception) {
-                e.printStackTrace()
+                Toast.makeText(this, "Incorrect input :(", Toast.LENGTH_SHORT).show()
             }
         }
 

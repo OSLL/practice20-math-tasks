@@ -1,7 +1,6 @@
 package com.internat239.digitality
 
 import android.content.Context
-import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import java.util.*
@@ -30,8 +29,21 @@ class Statistics {
         hintsCountSum += gameStats.hintsCount
     }
 
-    fun addGame(difficulty : Int, mode : Int, task: String, answer: String, moves : Int, minMoves : Int, timeStart : Date, timeEnd : Date, hintsCount : Int, result: Boolean) {
-        addGame(GameStats(difficulty, mode, task, answer, moves, minMoves, timeStart, timeEnd, hintsCount, result))
+    fun addGame(
+        difficulty : Int,
+        mode : Int,
+        task: String,
+        answer: String,
+        moves : Int,
+        minMoves : Int,
+        timeStart : Date,
+        timeEnd : Date,
+        hintsCount : Int,
+        result: Boolean,
+        attemptsCount : Int,
+        userAnswer : String
+    ) {
+        addGame(GameStats(difficulty, mode, task, answer, moves, minMoves, timeStart, timeEnd, hintsCount, result, attemptsCount, userAnswer))
     }
 
     fun saveLocal(fileName : String, context: Context) {
@@ -67,9 +79,11 @@ class Statistics {
             val startTime : Date,
             var endTime : Date,
             var hintsCount : Int,
-            var result : Boolean
+            var result : Boolean,
+            var attemptsCount : Int,
+            var userAnswer : String
         ) {
-            constructor() : this(0, 0, "", "", 0, 0, Date(), Date(), 0, false)
+            constructor() : this(0, 0, "", "", 0, 0, Date(), Date(), 0, false, 0, "")
             constructor(
                 difficulty: Int,
                 mode: Int,
@@ -86,7 +100,10 @@ class Statistics {
                 Calendar.getInstance().time,
                 Date(),
                 0,
-                false)
+                false,
+                0,
+                ""
+            )
             val time
                 get() = (endTime.time - startTime.time).toInt()
 
