@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="stat_path">stats.json</string>
+    <string name="stat_path">%s-stats.json</string>
 </resources>

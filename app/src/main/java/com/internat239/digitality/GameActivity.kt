@@ -276,7 +276,7 @@ class GameActivity: AppCompatActivity() {
 
         val user = FirebaseAuth.getInstance().currentUser
         var statisticsCloud : Statistics? = null
-        statistics = Statistics.getLocal(getString(R.string.stat_path), this)
+        statistics = Statistics.getLocal(getString(R.string.stat_path, user?.uid ?: "anon"), this)
         if(user != null)
             statisticsCloud = Statistics.getCloud(Firebase.firestore, user.uid)
 
@@ -412,8 +412,8 @@ class GameActivity: AppCompatActivity() {
     }
 
     override fun finish() {
-        statistics.saveLocal(getString(R.string.stat_path), this)
         val user = FirebaseAuth.getInstance().currentUser
+        statistics.saveLocal(getString(R.string.stat_path, user?.uid ?: "anon"), this)
         if(user != null)
             statistics.updateCloud(Firebase.firestore, user.uid)
         super.finish()

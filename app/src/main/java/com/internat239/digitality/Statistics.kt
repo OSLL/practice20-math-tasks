@@ -120,7 +120,11 @@ class Statistics {
                     file.createNewFile()
                     Statistics().saveLocal(fileName, context)
                 }
-                return Gson().fromJson(file.readText(), Statistics::class.java)
+                return try {
+                    Gson().fromJson(file.readText(), Statistics::class.java)
+                } catch (e : Exception) {
+                    Statistics()
+                }
             }
             return Statistics()
         }
