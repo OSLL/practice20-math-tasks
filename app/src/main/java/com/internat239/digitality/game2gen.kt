@@ -1,9 +1,9 @@
 package com.internat239.digitality
 
-fun gen2_game(hard:Int):String {
-    var operations: String = " +-*^%&|"
-    var ans: String = ""
-    var col: Array<Int> = Array(10, { i -> if (i == 0) 1; else 0 })
+fun gen2_game(hard: Int): String {
+    val operations = " +-*^%&|"
+    var ans = ""
+    val col: Array<Int> = Array(10) { i -> if (i == 0) 1; else 0 }
     if (hard == 1) {
         val num = (2..4).random()
         for (i in 0..num) {
@@ -11,7 +11,7 @@ fun gen2_game(hard:Int):String {
             var it = 0
             while (col[temp] == 1 && it < 10) {
                 temp = (1..9).random()
-                it++;
+                it++
             }
             if (col[temp] == 1) {
                 for (j in 0..9) {
@@ -24,7 +24,7 @@ fun gen2_game(hard:Int):String {
             col[temp] = 1
             ans += temp
             if (i != num) {
-                var opo: Char = operations[(0..3).random()]
+                val opo: Char = operations[(0..3).random()]
                 if (opo != ' ')
                     ans += opo
             }
@@ -38,12 +38,12 @@ fun gen2_game(hard:Int):String {
             var it = 0
             while (col[temp] == 1 && it < 10) {
                 temp = (1..9).random()
-                it++;
+                it++
             }
             if (col[temp] == 1) {
                 for (j in 0..9) {
                     if (col[j] != 1) {
-                        temp = j;
+                        temp = j
                         break
                     }
                 }
@@ -51,7 +51,7 @@ fun gen2_game(hard:Int):String {
             col[temp] = 1
             ans += temp
             if (i != num) {
-                var opo: Char = operations[(0..3).random()]
+                val opo: Char = operations[(0..3).random()]
                 if (opo != ' ')
                     ans += opo
             }
@@ -65,7 +65,7 @@ fun gen2_game(hard:Int):String {
             var it = 0
             while (col[temp] == 1 && it < 10) {
                 temp = (1..9).random()
-                it++;
+                it++
             }
             if (col[temp] == 1) {
                 for (j in 0..9) {
@@ -78,7 +78,7 @@ fun gen2_game(hard:Int):String {
             col[temp] = 1
             ans += temp
             if (i != num) {
-                var opo: Char = operations[(0..7).random()]
+                val opo: Char = operations[(0..7).random()]
                 if (opo != ' ')
                     ans += opo
             }

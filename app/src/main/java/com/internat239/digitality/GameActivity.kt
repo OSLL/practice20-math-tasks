@@ -21,15 +21,17 @@ import androidx.core.view.children
 import kotlinx.android.synthetic.main.activity_game.*
 
 
-class GameActivity: AppCompatActivity() {
+class GameActivity : AppCompatActivity() {
 
     class MovableTextView(
-        context : Context,
-        private val fixed : Boolean,
-        var infinitive : Boolean
+        context: Context,
+        private val fixed: Boolean,
+        var infinitive: Boolean
     ) : AppCompatTextView(context) {
         var task = false
-        private val standWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 25f, resources.displayMetrics).toInt()
+        private val standWidth =
+            TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 25f, resources.displayMetrics)
+                .toInt()
 
         init {
             layoutParams = ViewGroup.LayoutParams(
@@ -42,9 +44,9 @@ class GameActivity: AppCompatActivity() {
 
         }
 
-        fun decreaseWidth(newWidth : Int) {
+        fun decreaseWidth(newWidth: Int) {
             var tempNewWidth = newWidth
-            if(tempNewWidth > standWidth) {
+            if (tempNewWidth > standWidth) {
                 tempNewWidth = standWidth
             }
             val lp = layoutParams
@@ -56,11 +58,11 @@ class GameActivity: AppCompatActivity() {
         override fun onTouchEvent(event: MotionEvent?): Boolean {
             super.onTouchEvent(event)
 
-            if(fixed) return false
+            if (fixed) return false
 
             return when (event?.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    val target = if(infinitive && !task) clone() else this
+                    val target = if (infinitive && !task) clone() else this
                     val data = ClipData.newPlainText("", "")
                     val dsb = DragShadowBuilder(this)
                     if (Build.VERSION.SDK_INT >= 24) {
@@ -83,10 +85,10 @@ class GameActivity: AppCompatActivity() {
         }
     }
 
-    private fun task() : Pair<String, String> {
+    private fun task(): Pair<String, String> {
         val hard = intent.getIntExtra("difficulty", 1) + 1
 
-        return when(intent.getIntExtra("mode", 1)) {
+        return when (intent.getIntExtra("mode", 1)) {
             0 -> game1(hard)
             1 -> game2(hard)
             else -> game3(hard)
@@ -100,7 +102,7 @@ class GameActivity: AppCompatActivity() {
         private var dropped = false
 
         override fun onDrag(v: View?, event: DragEvent?): Boolean {
-            if(event == null) return false
+            if (event == null) return false
 
             val vll = v as LinearLayout
 
@@ -113,7 +115,7 @@ class GameActivity: AppCompatActivity() {
                     vll.removeView(dragView)
                     text = dragView.text.toString()
                     dragView.text = ""
-                    if(beginIndex != -1) {
+                    if (beginIndex != -1) {
                         vll.addView(dragView, beginIndex)
                     }
                     true
@@ -133,7 +135,7 @@ class GameActivity: AppCompatActivity() {
                         ) index = i
                     }
 
-                    if(begi != index) {
+                    if (begi != index) {
                         vll.removeView(dragView)
                         vll.addView(dragView, index)
                     }
@@ -154,9 +156,9 @@ class GameActivity: AppCompatActivity() {
                     vll.removeView(dragView)
                     dragView.text = text
                     dragView.visibility = View.VISIBLE
-                    if(dropped)
+                    if (dropped)
                         vll.addView(dragView, index)
-                    if(!event.result && beginIndex != -1)
+                    if (!event.result && beginIndex != -1)
                         vll.addView(dragView, beginIndex)
                     index = -2
                     true
@@ -176,7 +178,7 @@ class GameActivity: AppCompatActivity() {
         private var beginIndex = -1
 
         override fun onDrag(v: View?, event: DragEvent?): Boolean {
-            if(event == null)
+            if (event == null)
                 return false
 
             val vll = v as LinearLayout
@@ -195,7 +197,7 @@ class GameActivity: AppCompatActivity() {
                             (dragView.parent as? LinearLayout)?.removeView(dragView)
                             vll.addView(dragView, beginIndex)
                         }
-                    } catch (e : Exception) {
+                    } catch (e: Exception) {
                         e.printStackTrace()
                     }
                     true
@@ -209,13 +211,13 @@ class GameActivity: AppCompatActivity() {
         }
     }
 
-    private fun setTaskLayout(task : String) {
+    private fun setTaskLayout(task: String) {
 
         task_layout.removeAllViews()
 
-        var text : MovableTextView
+        var text: MovableTextView
 
-        for(a in task) {
+        for (a in task) {
             text = MovableTextView(this, true, false)
             text.text = a.toString()
 
@@ -227,19 +229,19 @@ class GameActivity: AppCompatActivity() {
 
         symbols_layout.removeAllViews()
 
-        var text : MovableTextView
+        var text: MovableTextView
 
-        var symbols = when(intent.getIntExtra("mode", 1)) {
+        var symbols = when (intent.getIntExtra("mode", 1)) {
             0 -> "123456789"
             1 -> "+-*"
             else -> "123456789+-*"
         }
 
-        if(intent.getIntExtra("difficulty", 1) == 2 && intent.getIntExtra("mode", 1) != 0)
+        if (intent.getIntExtra("difficulty", 1) == 2 && intent.getIntExtra("mode", 1) != 0)
             symbols += "^%&|"
 
-        for(a in symbols) {
-            if(!a.isDigit() || a !in exclude) {
+        for (a in symbols) {
+            if (!a.isDigit() || a !in exclude) {
 
                 text = MovableTextView(this, false, !a.isDigit())
                 text.text = a.toString()
@@ -250,8 +252,9 @@ class GameActivity: AppCompatActivity() {
     }
 
     private fun widthFix(layout: LinearLayout) {
-        val maxWidth = (layout.parent as ConstraintLayout).width - layout.paddingLeft - layout.paddingRight
-        for(mtv in layout.children) {
+        val maxWidth =
+            (layout.parent as ConstraintLayout).width - layout.paddingLeft - layout.paddingRight
+        for (mtv in layout.children) {
             (mtv as MovableTextView).decreaseWidth(maxWidth / layout.childCount)
         }
     }
@@ -259,13 +262,14 @@ class GameActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
-        difficulty.text = getString(R.string.difficulty_annotation, intent.getStringExtra("difficulty-name"))
+        difficulty.text =
+            getString(R.string.difficulty_annotation, intent.getStringExtra("difficulty-name"))
         mode.text = getString(R.string.mode_annotation, intent.getStringExtra("mode-name"))
         val menu = PopupMenu(this, button)
         menu.menu.add(1, 101, 1, "Settings")
         menu.menu.add(1, 102, 2, "How to play?")
         menu.setOnMenuItemClickListener {
-            when(it.itemId) {
+            when (it.itemId) {
                 101 -> {
                     finish()
                     true
@@ -316,10 +320,10 @@ class GameActivity: AppCompatActivity() {
             var right = ""
             var side = false
 
-            for(i in 0 until task_layout.childCount) {
-                if((task_layout.getChildAt(i) as TextView).text == "=") {
+            for (i in 0 until task_layout.childCount) {
+                if ((task_layout.getChildAt(i) as TextView).text == "=") {
                     side = true
-                } else if(!side) {
+                } else if (!side) {
                     left += (task_layout.getChildAt(i) as TextView).text
                 } else {
                     right += (task_layout.getChildAt(i) as TextView).text
@@ -329,10 +333,9 @@ class GameActivity: AppCompatActivity() {
                 if (Solver.solve(left) == Solver.solve(right)) {
                     Toast.makeText(this, "Correct!", Toast.LENGTH_SHORT).show()
                     skipButton.setText(R.string.next_button)
-                }
-                else
+                } else
                     Toast.makeText(this, "Incorrect :(", Toast.LENGTH_SHORT).show()
-            } catch (e : Exception) {
+            } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
@@ -346,7 +349,7 @@ class GameActivity: AppCompatActivity() {
             exclude += hint.second
             setSymbolsLayout(exclude)
 
-            if(hint.second == ' ')
+            if (hint.second == ' ')
                 Toast.makeText(this, "Чего тебе ещё надо, собака?", Toast.LENGTH_SHORT).show()
         }
 
